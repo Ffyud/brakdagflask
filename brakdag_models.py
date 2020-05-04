@@ -34,19 +34,16 @@ class bronModel:
 
     def create(self, params):
         print (params)
-        query = f'INSERT INTO {self.TABLENAME} ' \
+        query = f'insert into {self.TABLENAME} ' \
                 f'(title, link) ' \
-                f'VALUES ("{params.get("title")}","{params.get("link")}")'
+                f'values ("{params.get("title")}","{params.get("link")}")'
         
-        cursor = self.conn.cursor()
-        cursor.execute(query)
-        return cursor.lastrowid
+        result = self.conn.execute(query)
+        self.conn.commit()
 
     def selectAll(self):
-        cursor = self.conn.cursor()
         query = f'select * ' \
                 f'from {self.TABLENAME}' 
 
-        cursor.execute(query)
-        data = cursor.fetchall()
-        return json.dumps(data)       
+        result_set = self.conn.execute(query).fetchall()
+        return result_set
