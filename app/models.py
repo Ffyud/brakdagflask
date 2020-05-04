@@ -13,7 +13,8 @@ class Schema:
                 f'id INTEGER PRIMARY KEY AUTOINCREMENT, ' \
                 f'title TEXT, ' \
                 f'link TEXT, ' \
-                f'logo TEXT);'        
+                f'logo TEXT, ' \
+                f'description TEXT);'        
         
         result = self.conn.execute(query)
         self.conn.commit()
@@ -27,8 +28,11 @@ class BronModel:
     def create(self, params):
         print (params)
         query = f'insert into {self.TABLENAME} ' \
-                f'(title, link) ' \
-                f'values ("{params.get("title")}","{params.get("link")}")'
+                f'(title, link, logo, description) ' \
+                f'values ("{params.get("title")}", ' \
+                f'"{params.get("link")}", ' \
+                f'"{params.get("logo")}", ' \
+                f'"{params.get("description")}")'
         
         result = self.conn.execute(query)
         self.conn.commit()

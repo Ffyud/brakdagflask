@@ -20,4 +20,4 @@ def create_bron():
 
 if __name__ == "__main__":
     Schema()
-    app.run()     
+    app.run()
