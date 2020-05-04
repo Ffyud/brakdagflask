@@ -1,8 +1,8 @@
-from brakdag_models import bronModel
+from models import BronModel
 
-class bronService:
+class BronService:
     def __init__(self):
-        self.model = bronModel()
+        self.model = BronModel()
         
     def create(self, params):
         return self.model.create(params)

@@ -2,31 +2,23 @@ import sqlite3
 import json
 
 class Schema:
+    TABLENAME = "Bron"
+
     def __init__(self):
-        try:
-            self.conn = sqlite3.connect('brakdag-database.db')
-            return self.conn
-        except Error as e:
-            print(e)
-        
+        self.conn = sqlite3.connect('brakdag-database.db')
         self.create_bron_table()
 
-    def __del__(self):
-        self.conn.commit()
-        self.conn.close()    
-
     def create_bron_table(self):
-        query = f'CREATE TABLE IF NOT EXISTS "Bron" (' \
+        query = f'CREATE TABLE IF NOT EXISTS "{self.TABLENAME}" (' \
                 f'id INTEGER PRIMARY KEY AUTOINCREMENT, ' \
                 f'title TEXT, ' \
                 f'link TEXT, ' \
-                f'logo TEXT);'
+                f'logo TEXT);'        
         
-        self.conn.execute(query)
+        result = self.conn.execute(query)
         self.conn.commit()
-        self.conn.close()
 
-class bronModel:
+class BronModel:
     TABLENAME = "Bron"
 
     def __init__(self):
