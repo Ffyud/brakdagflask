@@ -1,0 +1,20 @@
+body {
+    width: 100%;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+}
+
+.brakdag-menu {
+    background: lightgreen;
+    height: 80px;
+
+}
+.title {
+    color: green;
+    font-size: 16px;
+}
+.buttons {
+    color: black;
+    font-size: 14px;
+    text-decoration: underline;
+}
