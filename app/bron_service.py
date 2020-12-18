@@ -1,4 +1,4 @@
-from models import BronModel
+from bron_model import BronModel
 
 class BronService:
     def __init__(self):
@@ -8,4 +8,4 @@ class BronService:
         return self.model.create(params)
 
     def selectAll(self):
-        return self.model.selectAll()    
+        return self.model.selectAll() 
