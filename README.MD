@@ -1,3 +1,3 @@
-[![Build Status](https://travis-ci.com/Ffyud/brakdag-v2.svg?branch=master)](https://travis-ci.com/Ffyud/brakdag-v2)
-
 ### Brakdag v2
+
+REST-backend waar nog aan gewerkt wordt.
