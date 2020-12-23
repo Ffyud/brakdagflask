@@ -4,20 +4,22 @@ import json
 import requests
 import re
 import datetime
+import logging
 
 def nieuwsVanBronnenHalen():
+    logging.basicConfig(filename='nieuws-ophalen.log', level=logging.WARN)
     # monkey-patch het SSL-certificaat probleem
     if hasattr(ssl, '_create_unverified_context'):
         ssl._create_default_https_context = ssl._create_unverified_context
 
     resp = requests.get('http://127.0.0.1:5000/bronnen')
     if resp.status_code != 200:
-        raise ApiError('Foute boel'.format(resp.status_code))
+        raise ApiError(resp.status_code)
     elif resp.status_code == 200:
-        print("Even geduld tot alle stappen zijn doorlopen.")
-        print("1/6 Lijst met bronnen is opgevraagd.")
+        logging.info('Even geduld tot alle stappen zijn doorlopen.')
+        logging.info('1/6 Lijst met bronnen is opgevraagd.')
     bronnenLijst = resp.json()
-    print("2/6 Er zijn " + str(len(bronnenLijst))+ " bronnen gevonden.")
+    logging.info('2/6 Er zijn " + str(len(bronnenLijst))+ " bronnen gevonden.')
 
     data=[]
     dataAlleBronnen=[]
@@ -41,7 +43,7 @@ def nieuwsVanBronnenHalen():
 
             itemAttributenList.append({"title": e.title, "link": e.link, "timestamp_publicatie": timestampPublicatie, "description": descriptionSchoonVanWhiteSpace})
 
-    print("3/6 Er zijn in totaal " + str(len(itemAttributenList)) + " items gevonden.")
+    logging.info('3/6 Er zijn in totaal ' + str(len(itemAttributenList)) + ' items gevonden.')
     foutenGevondenList = []
     #  ombatterijen naar int ipv list
     aantalBestaatAlInt = 0
@@ -60,14 +62,15 @@ def nieuwsVanBronnenHalen():
                 elif 'goed' in data['resultaat']:    
                     aantalToegevoegdInt += 1
 
-    print("\n4/6 Er zijn " + str(aantalBestaatAlInt) + " items gevonden die al bekend zijn.")
-    print("5/6 Er zijn " + str(aantalToegevoegdInt) + " nieuwe items gevonden.")
+    logging.info('\n4/6 Er zijn ' + str(aantalBestaatAlInt) + ' items gevonden die al bekend zijn.')
+    logging.info('5/6 Er zijn ' + str(aantalToegevoegdInt) + ' nieuwe items gevonden.')
     if len(foutenGevondenList) == 0:
-        print("\n6/6 0 fouten teruggekregen bij het toevoegen van de items.")
+        logging.info('\n6/6 Nieuwsverzamelen klaar, met 0 fouten.')
     else:
-        print("6/6 Er zijn " + str(len(foutenGevondenList)) + " items fout is gegaan: \n")
-        print(foutenGevondenList)
-        print("\n")
+        logging.info('Nieuwsverzamelen afgerond met ' + str(len(foutenGevondenList)) + ' fouten.')
+        for fout in foutenGevondenList:
+            logging.warning('Fout: ' + fout)
+
 
 if __name__ == "__main__":
     nieuwsVanBronnenHalen()
