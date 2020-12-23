@@ -5,6 +5,7 @@ import requests
 import re
 import datetime
 import logging
+import sys
 
 def nieuwsVanBronnenHalen():
     logging.basicConfig(filename='nieuws-ophalen.log', level=logging.WARN)
@@ -14,7 +15,8 @@ def nieuwsVanBronnenHalen():
 
     resp = requests.get('http://127.0.0.1:5000/bronnen')
     if resp.status_code != 200:
-        raise ApiError(resp.status_code)
+        logging.critical(resp.status_code)
+        sys.exit()
     elif resp.status_code == 200:
         logging.info('Even geduld tot alle stappen zijn doorlopen.')
         logging.info('1/6 Lijst met bronnen is opgevraagd.')
