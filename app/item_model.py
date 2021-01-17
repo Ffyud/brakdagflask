@@ -122,6 +122,16 @@ class ItemModel:
         result_set = self.conn.execute(query).fetchall()
         return result_set
 
+    def selectBySource(self, param):
+        query = f'select a.*, b.title as bron_title, b.logo, b.link_home ' \
+                f'from {self.TABLENAME} as a ' \
+                f'join Bron as b on a.bron_id = b.id ' \
+                f'where b.id = {param} ' \
+                f'order by timestamp_gevonden desc'
+        self.conn.row_factory = dict_factory   
+        result_set = self.conn.execute(query).fetchall()
+        return result_set
+
     def selectStatistics(self):
         queryGrouped = f'SELECT COUNT(*) as aantal_items, b.* ' \
                        f'FROM Item as a ' \

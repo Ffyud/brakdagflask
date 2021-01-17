@@ -34,6 +34,10 @@ def geef_items_op_datum(datum):
     a_datetime = datetime.datetime.strptime(datum,"%d-%m-%Y") 
     return jsonify(ItemService().selectByDay(int(a_datetime.timestamp())))
 
+@app.route("/items/bron/<bron>", methods=["GET"])
+def geef_items_per_bron(bron):
+    return jsonify(ItemService().selectBySource(bron))
+
 @app.route("/items/statistics", methods=["GET"])
 def geef_item_statistics():
     return jsonify(ItemService().selectStatistics())

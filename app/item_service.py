@@ -11,7 +11,10 @@ class ItemService:
         return self.model.selectAll()
 
     def selectByDay(self, param):
-        return self.model.selectByDay(param)    
+        return self.model.selectByDay(param)
+
+    def selectBySource(self, param):
+        return self.model.selectBySource(param)
 
     def selectStatistics(self):
         return self.model.selectStatistics()
