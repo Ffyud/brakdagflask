@@ -27,6 +27,7 @@ class ItemSchema:
                 f'timestamp_publicatie INTEGER, ' \
                 f'timestamp_gevonden INTEGER, ' \
                 f'description TEXT, ' \
+                f'uitgelicht INTEGER, ' \
                 f'bron_id INTEGER);'
         
         result = self.conn.execute(query)
