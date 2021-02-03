@@ -19,5 +19,8 @@ class ItemService:
     def selectStatistics(self):
         return self.model.selectStatistics()
 
+    def selectByUitgelicht(self):
+        return self.model.selectByUitgelicht()
+
     def selectBySearch(self, param):
         return self.model.selectBySearch(param)

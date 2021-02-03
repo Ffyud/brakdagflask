@@ -42,6 +42,10 @@ def geef_items_per_bron(bron):
 def geef_item_statistics():
     return jsonify(ItemService().selectStatistics())
 
+@app.route("/items/uitgelicht", methods=["GET"])
+def geef_items_uitgelicht():
+    return jsonify(ItemService().selectByUitgelicht())    
+
 @app.route("/item", methods=["POST"])
 def create_item():
     return jsonify(ItemService().create(request.get_json()))

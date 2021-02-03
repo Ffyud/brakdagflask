@@ -153,4 +153,14 @@ class ItemModel:
                 f'order by a.timestamp_gevonden desc'
         self.conn.row_factory = dict_factory   
         result_set = self.conn.execute(query, (searchString,)).fetchall()
-        return result_set       
+        return result_set  
+
+    def selectByUitgelicht(self):
+        query = f'select a.*, b.title as bron_title, b.logo, b.link_home ' \
+                f'from {self.TABLENAME} as a ' \
+                f'join Bron as b on a.bron_id = b.id ' \
+                f'where a.uitgelicht = 1 ' \
+                f'order by timestamp_gevonden desc'
+        self.conn.row_factory = dict_factory   
+        result_set = self.conn.execute(query).fetchall()
+        return result_set
