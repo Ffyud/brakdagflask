@@ -2,7 +2,7 @@ FROM python:3.6-alpine
 
 RUN adduser -D brakdagflask
 
-WORKDIR /brakdagflask
+WORKDIR /home/brakdagflask
 
 COPY requirements.txt requirements.txt
 
@@ -12,8 +12,9 @@ RUN venv/bin/pip install gunicorn
 
 COPY app app
 COPY boot.sh ./
+RUN chmod +x boot.sh
 
-ENV FLASK_APP app.py
+ENV FLASK_APP=app/app.py
 
 RUN chown -R brakdagflask:brakdagflask ./
 USER brakdagflask
