@@ -1,5 +1,7 @@
 #!/bin/sh
 source venv/bin/activate
+ls
+cd app
 flask --version
 # flask db upgrade
 # flask translate compile

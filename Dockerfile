@@ -14,7 +14,7 @@ COPY app app
 COPY boot.sh ./
 RUN chmod +x boot.sh
 
-ENV FLASK_APP=app/app.py
+ENV FLASK_APP=brakdagflask
 
 RUN chown -R brakdagflask:brakdagflask ./
 USER brakdagflask
