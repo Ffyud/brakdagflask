@@ -1,5 +1,10 @@
 import sqlite3
 import json
+import os
+import logging
+
+DATA_PATH = "./database"
+TABLENAME = "Bron"
 
 def dict_factory(cursor, row):
     d = {}
@@ -8,11 +13,11 @@ def dict_factory(cursor, row):
     return d
     
 class BronSchema:
-    TABLENAME = "Bron"
 
     def __init__(self):
-        self.conn = sqlite3.connect('brakdag-database.db')
-        self.create_bron_table()
+        self.conn = sqlite3.connect(os.path.join(DATA_PATH,"brakdag-database.db"))
+        self.cursor = self.conn.cursor()
+        self.create_item_table()
 
     def create_bron_table(self):
         query = f'CREATE TABLE IF NOT EXISTS "{self.TABLENAME}" (' \
@@ -22,15 +27,16 @@ class BronSchema:
                 f'logo TEXT, ' \
                 f'description TEXT, ' \
                 f'link_home TEXT);'
-        
-        result = self.conn.execute(query)
+        print("execute die query dan")
+        self.cursor.execute(query)
         self.conn.commit()
+        self.conn.close()
 
 class BronModel:
     TABLENAME = "Bron"
 
     def __init__(self):
-        self.conn = sqlite3.connect('brakdag-database.db')
+        self.conn = sqlite3.connect(os.path.join(DATA_PATH,"brakdag-database.db"))
 
     def create(self, params):
         print (params)

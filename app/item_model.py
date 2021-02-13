@@ -1,10 +1,14 @@
 import sqlite3
 import json
 import time
+import os
 from datetime import date
 from datetime import datetime
 from flask import Response
 from urllib.parse import urlparse
+
+DATA_PATH = "./database"
+TABLENAME = "Item"
 
 def dict_factory(cursor, row):
     d = {}
@@ -13,10 +17,10 @@ def dict_factory(cursor, row):
     return d
 
 class ItemSchema:
-    TABLENAME = "Item"
 
     def __init__(self):
-        self.conn = sqlite3.connect('brakdag-database.db')
+        self.conn = sqlite3.connect(os.path.join(DATA_PATH,"brakdag-database.db"))
+        self.cursor = self.conn.cursor()
         self.create_item_table()
 
     def create_item_table(self):
@@ -30,14 +34,15 @@ class ItemSchema:
                 f'uitgelicht INTEGER, ' \
                 f'bron_id INTEGER);'
         
-        result = self.conn.execute(query)
+        self.cursor.execute(query)
         self.conn.commit()
+        self.conn.close()
 
 class ItemModel:
     TABLENAME = "Item" 
     
     def __init__(self):
-        self.conn = sqlite3.connect('brakdag-database.db')
+        self.conn = sqlite3.connect(os.path.join(DATA_PATH,"brakdag-database.db"))
 
     def create(self, params):
         timestampVanNu = int(time.time())

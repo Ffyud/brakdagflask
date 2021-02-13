@@ -2,12 +2,19 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import time
 import datetime
+import os
+import logging
 from bron_service import BronService
 from bron_model import BronSchema
 from item_service import ItemService
 from item_model import ItemSchema
 
 import json
+
+DATA_PATH = "./database"
+
+if os.path.exists(DATA_PATH) == False:
+    os.mkdir(DATA_PATH)
 
 app = Flask(__name__)
 # Cors moet weg in productie
