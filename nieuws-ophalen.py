@@ -7,13 +7,17 @@ import datetime
 import logging
 import sys
 
+BACKEND = "http://127.0.0.1:5000"
+GETBRON_VAR = BACKEND + "/bronnen"
+POSTITEM_VAR = BACKEND + "/item"
+
 def nieuwsVanBronnenHalen():
     logging.basicConfig(filename='nieuws-ophalen.log', level=logging.WARN)
     # monkey-patch het SSL-certificaat probleem
     if hasattr(ssl, '_create_unverified_context'):
         ssl._create_default_https_context = ssl._create_unverified_context
 
-    resp = requests.get('http://127.0.0.1:5000/bronnen')
+    resp = requests.get(GETBRON_VAR)
     if resp.status_code != 200:
         logging.critical(resp.status_code)
         sys.exit()
@@ -54,7 +58,7 @@ def nieuwsVanBronnenHalen():
         if 'title' in item:
             itemJson = json.dumps(item)
             custom_header = {"Content-Type": "application/json"}
-            respPost = requests.post('http://127.0.0.1:5000/item', data=itemJson, headers=custom_header)
+            respPost = requests.post(POSTITEM_VAR, data=itemJson, headers=custom_header)
             if respPost.status_code != 200:
                 foutenGevondenList.append(item['title'])
             elif respPost.status_code == 200:
