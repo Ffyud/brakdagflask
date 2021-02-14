@@ -40,7 +40,9 @@ Tabellen:
 
 ### Automatisch nieuws ophalen
 ----
-Het **nieuws-ophalen** script bevraagd de _Bron_ tabel voor RSS-feeds en plaatst alle gevonden artikelen in de _Item_ tabel.
+Het **nieuws-ophalen** script bevraagd de _Bron_ tabel voor RSS-feeds en plaatst alle gevonden artikelen in de _Item_ tabel. Het endpoint wordt meegegeven aan het script.
+
+`python3 nieuws-ophalen http://127.0.0.1:5000`
 
    
   
