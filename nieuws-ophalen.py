@@ -7,7 +7,7 @@ import datetime
 import logging
 import sys
 
-BACKEND = "http://127.0.0.1:5000"
+BACKEND = sys.argv[1]
 GETBRON_VAR = BACKEND + "/bronnen"
 POSTITEM_VAR = BACKEND + "/item"
 
