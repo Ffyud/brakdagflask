@@ -9,11 +9,6 @@ Brakdagflask ontsluit het nieuwsarchief uit een database. Het nieuwsarchief best
 * In combinatie met [Gunicorn](https://gunicorn.org/) en [NGINX](https://www.nginx.com/) wordt de service beschikbaar via het web. 
 * Met [Docker](https://www.docker.com/) wordt alles in de lucht gebracht. Er zijn twee containers nodig, één voor brakdagflask zelf en één voor NGINX.
 
-- [brakdagflask](#brakdagflask)
-- [### Draaien met Docker](#-draaien-met-docker)
-- [### Gebruik van de database](#-gebruik-van-de-database)
-- [### Automatisch nieuws ophalen](#-automatisch-nieuws-ophalen)
-
 ---
 
 ### Draaien met Docker
