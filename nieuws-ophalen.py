@@ -12,7 +12,10 @@ GETBRON_VAR = BACKEND + "/bronnen"
 POSTITEM_VAR = BACKEND + "/item"
 
 def nieuwsVanBronnenHalen():
-    logging.basicConfig(filename='nieuws-ophalen.log', level=logging.WARN)
+    logging.basicConfig(filename='nieuws-ophalen.log', level=logging.INFO)
+
+    logging.info("Het endpoint is '" + BACKEND + "'.")
+
     # monkey-patch het SSL-certificaat probleem
     if hasattr(ssl, '_create_unverified_context'):
         ssl._create_default_https_context = ssl._create_unverified_context
