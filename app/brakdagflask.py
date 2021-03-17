@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import time
 import datetime
 import os
@@ -18,7 +18,7 @@ if os.path.exists(DATA_PATH) == False:
 
 app = Flask(__name__)
 # Cors moet weg in productie
-CORS(app) 
+# CORS(app) 
 
 @app.route("/")
 def welkom():
@@ -29,6 +29,7 @@ def geef_bronnen():
     return jsonify(BronService().selectAll())
 
 @app.route("/bron", methods=["POST"])
+@cross_origin(resources={r"/*": {"origins": ["http://localhost:3000", "-"]}})
 def create_bron():
     return jsonify(BronService().create(request.get_json()))
 
@@ -54,6 +55,7 @@ def geef_items_uitgelicht():
     return jsonify(ItemService().selectByUitgelicht())    
 
 @app.route("/item", methods=["POST"])
+@cross_origin(resources={r"/*": {"origins": ["http://localhost:3000", "-"]}})
 def create_item():
     return jsonify(ItemService().create(request.get_json()))
 

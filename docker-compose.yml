@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+    brakdagflask:
+        container_name: brakdagflask
+        ports:
+            - '8000:5000'
+        image: 'brakdagflask:latest'
+    nginx:
+        container_name: nginx
+        ports:
+            - '80:80'
+        image: 'nginx:latest'
