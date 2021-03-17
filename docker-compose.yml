@@ -1,11 +1,15 @@
 version: '3.3'
 services:
     brakdagflask:
+        build: .
         container_name: brakdagflask
         ports:
             - '8000:5000'
         image: 'brakdagflask:latest'
     nginx:
+        build: 
+            context: .
+            dockerfile: /nginx/Dockerfile
         container_name: nginx
         ports:
             - '80:80'
