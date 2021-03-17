@@ -29,7 +29,7 @@ def geef_bronnen():
     return jsonify(BronService().selectAll())
 
 @app.route("/bron", methods=["POST"])
-@cross_origin(resources={r"/*": {"origins": ["http://localhost:3000", "-"]}})
+@cross_origin(resources={r"/*": {"origins": ["http://localhost:3000", "-", "http://95.217.165.225:1337"]}})
 def create_bron():
     return jsonify(BronService().create(request.get_json()))
 
