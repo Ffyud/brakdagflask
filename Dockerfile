@@ -5,7 +5,6 @@ RUN adduser -D brakdagflask
 WORKDIR /home/brakdagflask
 
 COPY requirements.txt requirements.txt
-RUN sudo apt-get update
 RUN python -m venv venv
 RUN venv/bin/pip install --upgrade pip
 RUN venv/bin/pip install -r requirements.txt
