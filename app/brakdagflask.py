@@ -18,7 +18,8 @@ if os.path.exists(DATA_PATH) == False:
 
 app = Flask(__name__)
 # Cors moet weg in productie
-CORS(app) 
+# CORS(app)
+cors = CORS(app, resources={r"/*": {"origins": "http://95.217.165.225:1337"}})
 
 @app.route("/")
 def welkom():
@@ -29,7 +30,6 @@ def geef_bronnen():
     return jsonify(BronService().selectAll())
 
 @app.route("/bron", methods=["POST"])
-# @cross_origin(resources={r"/*": {"origins": ["http://localhost:3000", "-", "http://95.217.165.225:1337"]}})
 def create_bron():
     return jsonify(BronService().create(request.get_json()))
 
