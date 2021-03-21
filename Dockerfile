@@ -1,6 +1,6 @@
 FROM python:3.8-alpine
 
-RUN adduser --disabled-login brakdagflask
+RUN adduser -d brakdagflask
 
 WORKDIR /home/brakdagflask
 
