@@ -1,5 +1,4 @@
 feedparser
-ssl
 json
 requests
 re
