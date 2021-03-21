@@ -1,6 +1,5 @@
 feedparser
 requests
-re
 datetime
 schedule
 time
