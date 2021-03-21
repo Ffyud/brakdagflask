@@ -9,7 +9,7 @@ services:
     nginx:
         build: 
             context: .
-            dockerfile: /nginx/Dockerfile
+            dockerfile: nginx/Dockerfile
         container_name: nginx
         ports:
             - '80:80'
