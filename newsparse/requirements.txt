@@ -1,5 +1,4 @@
 feedparser
-json
 requests
 re
 datetime
