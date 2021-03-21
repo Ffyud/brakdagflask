@@ -2,5 +2,3 @@ feedparser
 requests
 datetime
 schedule
-logging
-sys
