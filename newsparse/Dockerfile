@@ -6,8 +6,8 @@ WORKDIR /home/newsparse
 
 RUN python -m venv venv
 
-COPY ./nieuws-ophalen.py nieuws-ophalen.py
-COPY ./oot.sh boot.sh
+COPY ./newsparse/nieuws-ophalen.py nieuws-ophalen.py
+COPY ./newsparse/boot.sh boot.sh
 RUN chmod +x boot.sh
 
 RUN chown -R newsparse:newsparse ./
