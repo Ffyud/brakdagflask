@@ -14,3 +14,9 @@ services:
         ports:
             - '80:80'
         image: 'nginx:latest'
+    newsparse:
+        build:
+            context: .
+            dockerfile: newsparse/Dockerfile
+        container_name: newsparse
+        image: 'newsparse:latest'
