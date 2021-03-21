@@ -1,6 +1,6 @@
 FROM python:3.8-alpine
 
-RUN adduser -d brakdagflask
+RUN adduser -D brakdagflask
 
 WORKDIR /home/brakdagflask
 
