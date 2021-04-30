@@ -14,15 +14,19 @@ GETBRON_VAR = BACKEND + "/bronnen"
 POSTITEM_VAR = BACKEND + "/item"
 
 def nieuwsVanBronnenHalen():
-    logging.basicConfig(filename='nieuws-ophalen.log', level=logging.INFO)
+    logging.basicConfig(filename='nieuws-ophalen.log', level=logging.DEBUG)
 
     logging.info("Het endpoint is '" + BACKEND + "'.")
 
     # monkey-patch het SSL-certificaat probleem
     if hasattr(ssl, '_create_unverified_context'):
         ssl._create_default_https_context = ssl._create_unverified_context
-
+    
+    # FIXME!
+    # custom_header = {"Content-Type": "application/json"}
+    # resp = requests.get(GETBRON_VAR, headers=custom_header)
     resp = requests.get(GETBRON_VAR)
+
     if resp.status_code != 200:
         logging.critical(resp.status_code)
     elif resp.status_code == 200:
