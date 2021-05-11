@@ -44,3 +44,5 @@ services:
       dockerfile: newsparse/Dockerfile
     container_name: newsparse
     image: 'newsparse:latest'
+volumes:
+  db-data:
