@@ -1,4 +1,4 @@
-USE Brakdag;
+USE brakdag;
 
 CREATE TABLE IF NOT EXISTS Bron (id INTEGER PRIMARY KEY AUTOINCREMENT, 
 title TEXT, link_rss TEXT, logo TEXT, description TEXT, link_home TEXT);
