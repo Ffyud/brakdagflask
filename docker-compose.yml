@@ -39,6 +39,10 @@ services:
     ports:
       - '80:80'
     image: 'nginx:latest'
+    depends_on:
+      - brakdagflask
+      - db
+      - phpmyadmin
   # newsparse:
   #   build:
   #     context: .
