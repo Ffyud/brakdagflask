@@ -10,7 +10,6 @@ RUN python -m venv venv
 RUN venv/bin/pip install -r requirements.txt
 RUN venv/bin/pip install gunicorn
 
-COPY nieuws-ophalen.py nieuws-ophalen.py
 COPY app app
 COPY boot.sh ./
 RUN chmod +x boot.sh
