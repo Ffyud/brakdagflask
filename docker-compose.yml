@@ -45,4 +45,4 @@ services:
     container_name: newsparse
     image: 'newsparse:latest'
 volumes:
-  db-data:
+  db_data:
