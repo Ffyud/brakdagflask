@@ -44,7 +44,7 @@ def test():
     link_home = request_data['link_home']
 
     cursor = mysql.connection.cursor()
-    cursor.execute(''' insert into {self.TABLENAME} (title, link_rss, logo, description, link_home) values (%s, $s, $s, $s, $s)''',(title,link_rss,logo,description,link_home))
+    cursor.execute(''' INSERT INTO bron (title, link_rss, logo, description, link_home) VALUES (%s, $s, $s, $s, $s)''',(title,link_rss,logo,description,link_home))
     mysql.connection.commit()
     cursor.close()
     return f'jeej!'
