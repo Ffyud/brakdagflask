@@ -2,3 +2,4 @@ Flask
 Flask-Migrate
 flask-cors
 schedule
+flask_mysqldb

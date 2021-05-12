@@ -15,8 +15,7 @@ def dict_factory(cursor, row):
 class BronSchema:
 
     def __init__(self):
-        self.conn = sqlite3.connect(os.path.join(DATA_PATH,"brakdag-database.db"))
-        self.cursor = self.conn.cursor()
+        self.cursor = self.mysql.connection.cursor()
         self.create_item_table()
 
     def create_bron_table(self):
@@ -29,14 +28,14 @@ class BronSchema:
                 f'link_home TEXT);'
         print("execute die query dan")
         self.cursor.execute(query)
-        self.conn.commit()
-        self.conn.close()
+        self.connection.commit()
+        self.cursor.close()
 
 class BronModel:
     TABLENAME = "Bron"
 
     def __init__(self):
-        self.conn = sqlite3.connect(os.path.join(DATA_PATH,"brakdag-database.db"))
+        self.cursor = self.mysql.connection.cursor()
 
     def create(self, params):
         print (params)
@@ -48,12 +47,12 @@ class BronModel:
                 f'"{params.get("description")}", ' \
                 f'"{params.get("link_home")}")'
         
-        result = self.conn.execute(query)
-        self.conn.commit()
+        result = self.cursor.execute(query)
+        self.connection.commit()
 
     def selectAll(self):
         query = f'select * ' \
                 f'from {self.TABLENAME}' 
-        self.conn.row_factory = dict_factory
-        result_set = self.conn.execute(query).fetchall()
+        self.connection.row_factory = dict_factory
+        result_set = self.cursor.execute(query).fetchall()
         return result_set

@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
+from flask_mysqldb import MySQL
 import time
 import datetime
 import os
@@ -17,6 +18,14 @@ if os.path.exists(DATA_PATH) == False:
     os.mkdir(DATA_PATH)
 
 app = Flask(__name__)
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'brakdag'
+app.config['MYSQL_PASSWORD'] = 'brakdag'
+app.config['MYSQL_DB'] = 'brakdag'
+
+mysql = MySQL(app)
+
 # Cors moet weg in productie
 # CORS(app)
 cors = CORS(app, resources={r"/*": {"origins": "http://95.217.165.225:1337"}})
