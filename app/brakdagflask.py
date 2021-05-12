@@ -34,6 +34,21 @@ cors = CORS(app, resources={r"/*": {"origins": "http://95.217.165.225:1337"}})
 def welkom():
     return "Welkom!"
 
+@app.route("/test", methods=["POST"])
+def test():
+    request_data = request.get_json()
+    title = request_data['title']
+    link_rss = request_data['link_rss']
+    logo = request_data['logo']
+    description = request_data['description']
+    link_home = request_data['link_home']
+
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' insert into {self.TABLENAME} (title, link_rss, logo, description, link_home) values (%s, $s, $s, $s, $s)''',(title,link_rss,logo,description,link_home))
+    mysql.connection.commit()
+    cursor.close()
+    return f'jeej!'
+
 @app.route("/bronnen", methods=["GET"])
 def geef_bronnen():
     return jsonify(BronService().selectAll())

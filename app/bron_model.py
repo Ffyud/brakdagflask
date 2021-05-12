@@ -1,7 +1,6 @@
 import json
 import os
 import logging
-import mysql
 
 DATA_PATH = "./database"
 TABLENAME = "Bron"
