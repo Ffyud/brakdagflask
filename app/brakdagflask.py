@@ -19,7 +19,7 @@ if os.path.exists(DATA_PATH) == False:
 
 app = Flask(__name__)
 
-app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_HOST'] = '172.20.0.4'
 app.config['MYSQL_USER'] = 'brakdag'
 app.config['MYSQL_PASSWORD'] = 'brakdag'
 app.config['MYSQL_DB'] = 'brakdag'
