@@ -1,8 +1,7 @@
-import sqlite3
 import json
 import os
 import logging
-from brakdagflask import mysql
+import mysql
 
 DATA_PATH = "./database"
 TABLENAME = "Bron"
