@@ -2,8 +2,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from flask_mysqldb import MySQL
 import time
-import datetime
-import date
+from datetime import date
+from datetime import datetime
 import os
 import time
 import logging
