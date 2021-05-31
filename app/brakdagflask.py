@@ -3,7 +3,9 @@ from flask_cors import CORS, cross_origin
 from flask_mysqldb import MySQL
 import time
 import datetime
+import date
 import os
+import time
 import logging
 from bron_service import BronService
 from bron_model import BronSchema
@@ -59,6 +61,26 @@ def get_bron():
     cursor.close()
     return jsonify(rows)
 
+@app.route("/items", methods=["GET"])
+def geef_items():
+    # Timestamp van middernacht tot aan huidige tijd gebruiken
+    vandaag = date.today()
+    middernacht = datetime.combine(vandaag, datetime.min.time())
+    timestampMiddernacht = int(middernacht.timestamp())
+    timestampNu = int(time.time())
+
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' SELECT a.*, b.title as bron_title, b.logo, b.link_home 
+                       FROM Item as a 
+                       JOIN Bron as b ON a.bron_id = b.id 
+                       WHERE timestamp_publicatie >= %s 
+                       AND timestamp_publicatie <= %s 
+                       ORDER BY timestamp_gevonden DESC''', (timestampMiddernacht, timestampNu))
+    mysql.connection.commit()
+    rows = cursor.fetchall()
+    cursor.close()
+    return jsonify(rows)
+
 # @app.route("/bronnen", methods=["GET"])
 # def geef_bronnen():
 #     return jsonify(BronService().selectAll())
@@ -67,9 +89,9 @@ def get_bron():
 # def create_bron():
 #     return jsonify(BronService().create(request.get_json()))
 
-@app.route("/items", methods=["GET"])
-def geef_items():
-    return jsonify(ItemService().selectAll())
+# @app.route("/items", methods=["GET"])
+# def geef_items():
+#     return jsonify(ItemService().selectAll())
 
 @app.route("/items/<datum>", methods=["GET"])
 def geef_items_op_datum(datum):
