@@ -10,7 +10,7 @@ import logging
 import sys
 
 BACKEND = sys.argv[1]
-GETBRON_VAR = BACKEND + "/bronnen"
+GETBRON_VAR = BACKEND + "/bron"
 POSTITEM_VAR = BACKEND + "/item"
 
 def nieuwsVanBronnenHalen():
