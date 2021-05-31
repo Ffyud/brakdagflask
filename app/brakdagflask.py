@@ -51,7 +51,7 @@ def post_bron():
 
 @app.route("/bronnen", methods=["GET"])
 def get_bron(): 
-    cursor = mysql.connection.cursor()
+    cursor = mysql.connection.cursor(dictionary=True)
     cursor.execute(''' SELECT * FROM Bron ''')
     mysql.connection.commit()
     rows = cursor.fetchall()
