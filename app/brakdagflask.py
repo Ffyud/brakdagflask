@@ -23,6 +23,7 @@ app.config['MYSQL_HOST'] = 'db'
 app.config['MYSQL_USER'] = 'brakdag'
 app.config['MYSQL_PASSWORD'] = 'brakdag'
 app.config['MYSQL_DB'] = 'brakdag'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
 
@@ -51,7 +52,7 @@ def post_bron():
 
 @app.route("/bronnen", methods=["GET"])
 def get_bron(): 
-    cursor = mysql.connection.cursor(dictionary=True)
+    cursor = mysql.connection.cursor()
     cursor.execute(''' SELECT * FROM Bron ''')
     mysql.connection.commit()
     rows = cursor.fetchall()
