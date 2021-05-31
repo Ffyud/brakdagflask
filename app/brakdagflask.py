@@ -34,8 +34,8 @@ cors = CORS(app, resources={r"/*": {"origins": "http://95.217.165.225:1337"}})
 def welkom():
     return "Welkom!"
 
-@app.route("/test", methods=["POST"])
-def test():
+@app.route("/bron", methods=["POST"])
+def post_bron():
     request_data = request.get_json()
     title = request_data['title']
     link_rss = request_data['link_rss']
@@ -50,12 +50,21 @@ def test():
     return f'jeej!'
 
 @app.route("/bronnen", methods=["GET"])
-def geef_bronnen():
-    return jsonify(BronService().selectAll())
+def get_bron(): 
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' SELECT * FROM Bron ''')
+    mysql.connection.commit()
+    rows = cursor.fetchall()
+    cursor.close()
+    return jsonify(rows)
 
-@app.route("/bron", methods=["POST"])
-def create_bron():
-    return jsonify(BronService().create(request.get_json()))
+# @app.route("/bronnen", methods=["GET"])
+# def geef_bronnen():
+#     return jsonify(BronService().selectAll())
+
+# @app.route("/bron", methods=["POST"])
+# def create_bron():
+#     return jsonify(BronService().create(request.get_json()))
 
 @app.route("/items", methods=["GET"])
 def geef_items():
