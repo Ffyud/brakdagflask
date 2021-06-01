@@ -148,9 +148,8 @@ def post_item():
             cursor = mysql.connection.cursor()
             cursor.execute(''' SELECT id, title 
                                FROM Bron 
-                               WHERE link_home = %s''', ("der"))
+                               WHERE link_home = %s''', [linkHomeUrl])
             mysql.connection.commit()
-            aantalArtikelenGevonden = len(cursor.fetchall())
             resultBronRij = cursor.fetchone()
             cursor.close()
 
