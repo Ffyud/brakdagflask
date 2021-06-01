@@ -139,8 +139,8 @@ def get_items_per_datum(datum):
     cursor.execute(''' SELECT a.*, b.title as bron_title, b.logo, b.link_home 
                        FROM Item as a 
                        JOIN Bron as b on a.bron_id = b.id 
-                       WHERE timestamp_publicatie >= %s '
-                       AND timestamp_publicatie <= %s '
+                       WHERE timestamp_publicatie >= %s
+                       AND timestamp_publicatie <= %s 
                        ORDER BY timestamp_gevonden DESC''', (timestamp_datum, a_day))
     mysql.connection.commit()
     rows = cursor.fetchall()
