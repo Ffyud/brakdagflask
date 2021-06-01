@@ -128,6 +128,25 @@ def get_items_per_bron(bron):
     return jsonify(rows)
 
 
+@app.route("/items/<datum>", methods=["GET"])
+def get_items_per_datum(datum):
+    a_datetime = datetime.datetime.strptime(datum, "%d-%m-%Y") 
+    timestamp_datum = int(a_datetime.timestamp())
+    a_day = timestamp_datum + 86400
+
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' SELECT a.*, b.title as bron_title, b.logo, b.link_home 
+                       FROM Item as a 
+                       JOIN Bron as b on a.bron_id = b.id 
+                       WHERE timestamp_publicatie >= %s '
+                       AND timestamp_publicatie <= %s '
+                       ORDER BY timestamp_gevonden DESC''', (timestamp_datum, a_day))
+    mysql.connection.commit()
+    rows = cursor.fetchall()
+    cursor.close()
+    return jsonify(rows)    
+
+
 @app.route("/item", methods=["POST"])
 # @cross_origin(resources={r"/*": {"origins": ["http://localhost:3000", "-"]}})
 def post_item():
@@ -212,11 +231,10 @@ def search_items():
     return jsonify(rows)
 
 
-@app.route("/items/<datum>", methods=["GET"])
-def geef_items_op_datum(datum):
-    a_datetime = datetime.datetime.strptime(datum, "%d-%m-%Y") 
-    return jsonify(ItemService().selectByDay(int(a_datetime.timestamp())))
-
+# @app.route("/items/<datum>", methods=["GET"])
+# def geef_items_op_datum(datum):
+#     a_datetime = datetime.datetime.strptime(datum, "%d-%m-%Y") 
+#     return jsonify(ItemService().selectByDay(int(a_datetime.timestamp())))
 
 # @app.route("/items/zoeken", methods=["POST"])
 # def zoek_items():
