@@ -195,15 +195,32 @@ def post_item():
         return "mislukt"
 
 
+@app.route("/items/zoeken", methods=["POST"])
+def search_items():
+    request_data = request.get_json()
+    search_string = request_data['term']
+
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' SELECT a.*, b.title as bron_title, b.logo, b.link_home 
+                       FROM Item as a 
+                       JOIN Bron as b on a.bron_id = b.id 
+                       WHERE a.title LIKE %s
+                       ORDER BY a.timestamp_gevonden DESC''', ["%"+search_string+"%"])
+    mysql.connection.commit()
+    rows = cursor.fetchall()
+    cursor.close()
+    return jsonify(rows)
+
+
 @app.route("/items/<datum>", methods=["GET"])
 def geef_items_op_datum(datum):
     a_datetime = datetime.datetime.strptime(datum, "%d-%m-%Y") 
     return jsonify(ItemService().selectByDay(int(a_datetime.timestamp())))
 
 
-@app.route("/items/zoeken", methods=["POST"])
-def zoek_items():
-    return jsonify(ItemService().selectBySearch(request.get_json()))
+# @app.route("/items/zoeken", methods=["POST"])
+# def zoek_items():
+#     return jsonify(ItemService().selectBySearch(request.get_json()))
 
 # @app.route("/item", methods=["POST"])
 # @cross_origin(resources={r"/*": {"origins": ["http://localhost:3000", "-"]}})
