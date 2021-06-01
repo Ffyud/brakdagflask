@@ -148,7 +148,7 @@ def post_item():
             cursor = mysql.connection.cursor()
             cursor.execute(''' SELECT id, title 
                                FROM Bron 
-                               WHERE link_hom e = %s''', [linkHomeUrl])
+                               WHERE link_home = %s''', [linkHomeUrl])
             mysql.connection.commit()
             resultBronRij = cursor.fetchone()
             cursor.close()
