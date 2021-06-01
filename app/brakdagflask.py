@@ -128,8 +128,10 @@ def post_item():
     if title and link:
         # Controleren of het artikel nog niet bestaat
         cursor = mysql.connection.cursor()
-        cursor.execute(''' SELECT id FROM Item 
-                           WHERE title = %s AND link = %s''', (title, link))
+        cursor.execute(''' SELECT id 
+                           FROM Item 
+                           WHERE title = %s 
+                           AND link = %s''', (title, link))
         mysql.connection.commit()
         aantalArtikelenGevonden = len(cursor.fetchall())
         cursor.close()
@@ -146,7 +148,7 @@ def post_item():
             cursor = mysql.connection.cursor()
             cursor.execute(''' SELECT id, title 
                                FROM Bron 
-                               WHERE link_home = %s''', (linkHomeUrl))
+                               WHERE link_home = %s''', ("der"))
             mysql.connection.commit()
             aantalArtikelenGevonden = len(cursor.fetchall())
             resultBronRij = cursor.fetchone()
