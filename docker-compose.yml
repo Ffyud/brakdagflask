@@ -44,11 +44,11 @@ services:
       - brakdagflask
       - db
       - phpmyadmin
-  # newsparse:
-  #   build:
-  #     context: .
-  #     dockerfile: newsparse/Dockerfile
-  #   container_name: newsparse
-  #   image: 'newsparse:latest'
+  newsparse:
+    build:
+      context: .
+      dockerfile: newsparse/Dockerfile
+    container_name: newsparse
+    image: 'newsparse:latest'
 volumes:
   db_data:
