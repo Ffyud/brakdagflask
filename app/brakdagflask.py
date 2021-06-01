@@ -4,8 +4,8 @@ from flask_mysqldb import MySQL
 import time
 from datetime import date
 from datetime import datetime
+import datetime as dt
 from urllib.parse import urlparse
-import datetime
 import os
 import time
 import logging
@@ -131,7 +131,7 @@ def get_items_per_bron(bron):
 
 @app.route("/items/<datum>", methods=["GET"])
 def get_items_per_datum(datum):
-    a_datetime = datetime.strptime(datum, "%d-%m-%Y") 
+    a_datetime = dt.datetime.strptime(datum, "%d-%m-%Y") 
     timestamp_datum = int(a_datetime.timestamp())
     a_day = timestamp_datum + 86400
 
