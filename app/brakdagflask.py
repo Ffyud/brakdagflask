@@ -148,7 +148,7 @@ def post_item():
             cursor = mysql.connection.cursor()
             cursor.execute(''' SELECT id, title 
                                FROM Bron 
-                               WHERE link_home = %s''', [linkHomeUrl])
+                               WHERE link_hom e = %s''', [linkHomeUrl])
             mysql.connection.commit()
             resultBronRij = cursor.fetchone()
             cursor.close()
@@ -157,7 +157,7 @@ def post_item():
             if resultBronRij == None:
                 resultBronId = 0
             else:
-                resultBronId = resultBronRij[0]
+                resultBronId = resultBronRij['id']
 
             cursor = mysql.connection.cursor()
             cursor.execute(''' INSERT INTO Item 
