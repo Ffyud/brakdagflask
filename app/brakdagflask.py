@@ -114,6 +114,19 @@ def get_item_statistics():
     cursor.close()
     return jsonify(rows)
 
+@app.route("/items/bron/<bron>", methods=["GET"])
+def get_items_per_bron(bron):
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' SELECT a.*, b.title as bron_title, b.logo, b.link_home 
+                       FROM Item as a 
+                       JOIN Bron as b ON a.bron_id = b.id 
+                       WHERE b.id = %s 
+                       ORDER BY timestamp_gevonden DESC''', [str(bron)])
+    mysql.connection.commit()
+    rows = cursor.fetchall()
+    cursor.close()
+    return jsonify(rows)
+
 
 @app.route("/item", methods=["POST"])
 # @cross_origin(resources={r"/*": {"origins": ["http://localhost:3000", "-"]}})
@@ -188,11 +201,6 @@ def geef_items_op_datum(datum):
     return jsonify(ItemService().selectByDay(int(a_datetime.timestamp())))
 
 
-@app.route("/items/bron/<bron>", methods=["GET"])
-def geef_items_per_bron(bron):
-    return jsonify(ItemService().selectBySource(bron))
-
-
 @app.route("/items/zoeken", methods=["POST"])
 def zoek_items():
     return jsonify(ItemService().selectBySearch(request.get_json()))
@@ -206,6 +214,9 @@ def zoek_items():
 # def geef_item_statistics():
 #     return jsonify(ItemService().selectStatistics())
 
+# @app.route("/items/bron/<bron>", methods=["GET"])
+# def geef_items_per_bron(bron):
+#     return jsonify(ItemService().selectBySource(bron))
 
 # @app.route("/items/uitgelicht", methods=["GET"])
 # def geef_items_uitgelicht():
