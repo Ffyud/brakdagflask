@@ -14,7 +14,7 @@ GETBRON_VAR = BACKEND + "/bron"
 POSTITEM_VAR = BACKEND + "/item"
 
 def nieuwsVanBronnenHalen():
-    logging.basicConfig(filename='nieuws-ophalen.log', level=logging.DEBUG)
+    logging.basicConfig(filename='nieuws-ophalen.log', level=logging.INFO)
 
     logging.info("Het endpoint is '" + BACKEND + "'.")
 

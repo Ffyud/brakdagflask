@@ -62,6 +62,8 @@ services:
       - '3300:3300'
     expose:
       - '3300'
+    environment:
+      - PYTHONUNBUFFERED=0  
     networks:
       - brakdag-network
     container_name: newsparse
