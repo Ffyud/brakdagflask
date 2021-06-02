@@ -7,6 +7,8 @@ services:
       - brakdag-network
     ports:
       - '8000:5000'
+    expose:
+      - '8000'
     image: 'brakdagflask:latest'
   db:
     image: mysql:5.7
@@ -57,9 +59,9 @@ services:
       context: .
       dockerfile: newsparse/Dockerfile
     ports:
-        - '3300:3300'
+      - '3300:3300'
     expose:
-        - '3300'
+      - '3300'
     networks:
       - brakdag-network
     container_name: newsparse
