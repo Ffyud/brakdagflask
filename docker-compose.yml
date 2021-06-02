@@ -67,6 +67,8 @@ services:
     container_name: newsparse
     restart: always
     image: 'newsparse:latest'
+    depends_on:
+      - brakdagflask
 volumes:
   db_data:
 networks:
