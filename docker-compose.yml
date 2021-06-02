@@ -3,6 +3,8 @@ services:
   brakdagflask:
     build: .
     container_name: brakdagflask
+    networks:
+      - brakdag-network
     ports:
       - '8000:5000'
     image: 'brakdagflask:latest'
@@ -12,6 +14,8 @@ services:
       - db_data:/var/lib/mysql
       - ${PWD}/init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
+    networks:
+      - brakdag-network
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: brakdag
@@ -26,6 +30,8 @@ services:
       - db
     image: phpmyadmin/phpmyadmin
     restart: always
+    networks:
+      - brakdag-network
     ports:
       - '8080:80'
     environment:
@@ -37,6 +43,8 @@ services:
       dockerfile: nginx/Dockerfile
     container_name: nginx
     restart: always
+    networks:
+      - brakdag-network
     ports:
       - '80:80'
     image: 'nginx:latest'
@@ -48,7 +56,12 @@ services:
     build:
       context: .
       dockerfile: newsparse/Dockerfile
+    networks:
+      - brakdag-network
     container_name: newsparse
     image: 'newsparse:latest'
 volumes:
   db_data:
+networks:
+  brakdag-network:
+    driver: bridge
