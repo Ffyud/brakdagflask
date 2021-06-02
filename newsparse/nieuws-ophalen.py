@@ -22,9 +22,6 @@ def nieuwsVanBronnenHalen():
     if hasattr(ssl, '_create_unverified_context'):
         ssl._create_default_https_context = ssl._create_unverified_context
     
-    # FIXME!
-    # custom_header = {"Content-Type": "application/json"}
-    # resp = requests.get(GETBRON_VAR, headers=custom_header)
     resp = requests.get(GETBRON_VAR)
 
     if resp.status_code != 200:
@@ -91,5 +88,5 @@ schedule.every(5).minutes.do(nieuwsVanBronnenHalen)
 if __name__ == "__main__":
     while True:
         schedule.run_pending()
-        time.sleep(300)
+        time.sleep(1)
         nieuwsVanBronnenHalen()
