@@ -56,9 +56,14 @@ services:
     build:
       context: .
       dockerfile: newsparse/Dockerfile
+    ports:
+        - '3300:3300'
+    expose:
+        - '3300'
     networks:
       - brakdag-network
     container_name: newsparse
+    restart: always
     image: 'newsparse:latest'
 volumes:
   db_data:
