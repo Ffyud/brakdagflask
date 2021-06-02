@@ -15,4 +15,5 @@ RUN chmod +x boot.sh
 RUN chown -R newsparse:newsparse ./
 USER newsparse
 
+EXPOSE 3300
 ENTRYPOINT ["./boot.sh"]
