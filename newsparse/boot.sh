@@ -1,3 +1,3 @@
 #!/bin/bash
 source venv/bin/activate
-exec python3 nieuws-ophalen.py http://brakdagflask:8000
+exec python3 nieuws-ophalen.py http://brakdagflask:5000
