@@ -31,8 +31,8 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
 # Cors moet weg in productie
-# CORS(app)
-cors = CORS(app, resources={r"/*": {"origins": "http://95.217.165.225:1337"}})
+CORS(app)
+# cors = CORS(app, resources={r"/*": {"origins": "http://95.217.165.225:1337"}})
 
 
 @app.route("/")
