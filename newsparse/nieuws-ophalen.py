@@ -22,7 +22,8 @@ def nieuwsVanBronnenHalen():
     if hasattr(ssl, '_create_unverified_context'):
         ssl._create_default_https_context = ssl._create_unverified_context
     
-    resp = requests.get(GETBRON_VAR)
+    custom_header = {"User-Agent": "newsparser"}
+    resp = requests.get(GETBRON_VAR, headers=custom_header)
 
     if resp.status_code != 200:
         logging.critical(resp.status_code)
