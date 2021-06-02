@@ -32,6 +32,7 @@ def nieuwsVanBronnenHalen():
         logging.info('1/6 Lijst met bronnen is opgevraagd.')
     bronnenLijst = resp.json()
     logging.info('2/6 Er zijn " + str(len(bronnenLijst))+ " bronnen gevonden.')
+    print(str(len(bronnenLijst)) + " bronnen gevonden.")
 
     if(len(bronnenLijst) != 0):
         data=[]
