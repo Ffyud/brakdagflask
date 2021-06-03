@@ -41,7 +41,11 @@ def nieuwsVanBronnenHalen():
         for b in bronnenLijst:
             bronUrl = b['link_rss']
             print(bronUrl)
-            bronParse = feedparser.parse(bronUrl)
+            try:
+                bronParse = feedparser.parse(bronUrl)
+            except:
+                logging.critical(bronUrl + 'kon niet bereikt worden.')
+                print(bronUrl + "kon niet bereikt worden.")
                 
             for e in bronParse['entries']:
                 # Zoveel mogelijk opschonen van description
