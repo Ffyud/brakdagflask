@@ -40,6 +40,7 @@ def nieuwsVanBronnenHalen():
         itemAttributenList=[]
         for b in bronnenLijst:
             bronUrl = b['link_rss']
+            print(bronUrl)
             bronParse = feedparser.parse(bronUrl)
                 
             for e in bronParse['entries']:
