@@ -54,10 +54,10 @@ def nieuwsVanBronnenHalen():
             print(bronUrl)
             try:
                 bronParse = feedparser.parse(bronUrl)
-            except Exception as e:
+            except Exception as trace:
                 logging.critical(bronUrl + ' kon niet bereikt worden.')
                 print("Oeps, " + bronUrl + " kon niet bereikt worden.")
-                print(e)
+                print(trace)
                 
             for e in bronParse['entries']:
                 # Zoveel mogelijk opschonen van description
