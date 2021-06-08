@@ -74,6 +74,7 @@ services:
       - brakdagflask
 volumes:
   db_data:
+  mysqlcustom.cnf:
 networks:
   brakdag-network:
     driver: bridge
