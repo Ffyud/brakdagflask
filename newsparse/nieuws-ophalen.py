@@ -12,8 +12,12 @@ import sys
 BACKEND = sys.argv[1]
 GETBRON_VAR = BACKEND + "/bron"
 POSTITEM_VAR = BACKEND + "/item"
+WAIT_FOR_MINUTES = 5
 
 def nieuwsVanBronnenHalen():
+    nu = datetime.datetime.now()
+    print("Van start op " + nu.strftime("%H:%M") + ".")
+    print("Nieuws ophalen begint over " + str(WAIT_FOR_MINUTES) + " minuten weer.")
     logging.basicConfig(filename='nieuws-ophalen.log', level=logging.INFO)
 
     logging.info("Het endpoint is '" + BACKEND + "'.")
@@ -30,7 +34,14 @@ def nieuwsVanBronnenHalen():
     elif resp.status_code == 200:
         logging.info('Even geduld tot alle stappen zijn doorlopen.')
         logging.info('1/6 Lijst met bronnen is opgevraagd.')
-    bronnenLijst = resp.json()
+    # TODO afvangen als json er niet is
+    try:
+        bronnenLijst = resp.json()
+    except ValueError:
+        logging.critical("Bronnen lijst leeg!")
+        print("Oeps, geen bronnen gevonden.")
+        bronnenLijst = []
+
     logging.info('2/6 Er zijn ' + str(len(bronnenLijst))+ ' bronnen gevonden.')
     print(str(len(bronnenLijst)) + " bronnen gevonden.")
 
@@ -90,10 +101,10 @@ def nieuwsVanBronnenHalen():
             for fout in foutenGevondenList:
                 logging.warning('Fout: ' + fout)
 
-schedule.every(5).minutes.do(nieuwsVanBronnenHalen)
+schedule.every(WAIT_FOR_MINUTES).minutes.do(nieuwsVanBronnenHalen)
 
 if __name__ == "__main__":
     while True:
         schedule.run_pending()
         time.sleep(1)
-        nieuwsVanBronnenHalen()
+        # nieuwsVanBronnenHalen()
