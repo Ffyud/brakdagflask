@@ -54,9 +54,10 @@ def nieuwsVanBronnenHalen():
             print(bronUrl)
             try:
                 bronParse = feedparser.parse(bronUrl)
-            except:
+            except Exception as e:
                 logging.critical(bronUrl + ' kon niet bereikt worden.')
-                print(bronUrl + " kon niet bereikt worden.")
+                print("Oeps, " + bronUrl + " kon niet bereikt worden.")
+                print(e)
                 
             for e in bronParse['entries']:
                 # Zoveel mogelijk opschonen van description
@@ -86,11 +87,15 @@ def nieuwsVanBronnenHalen():
                 if respPost.status_code != 200:
                     foutenGevondenList.append(item['title'])
                 elif respPost.status_code == 200:
-                    data = respPost.json()
-                    if 'artikel_bestaat_al' in data['resultaat']:
-                        aantalBestaatAlInt += 1
-                    elif 'goed' in data['resultaat']:    
-                        aantalToegevoegdInt += 1
+                    try:
+                        data = respPost.json()
+                        if 'artikel_bestaat_al' in data['resultaat']:
+                            aantalBestaatAlInt += 1
+                        elif 'goed' in data['resultaat']:    
+                            aantalToegevoegdInt += 1
+                    except ValueError:
+                        logging.critical("Bij toevoegen item kwam geen response!")
+                        print("Oeps, bij toevoegen item kwam geen response.")
 
         logging.info('\n4/6 Er zijn ' + str(aantalBestaatAlInt) + ' items gevonden die al bekend zijn.')
         logging.info('5/6 Er zijn ' + str(aantalToegevoegdInt) + ' nieuwe items gevonden.')
