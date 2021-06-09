@@ -89,6 +89,19 @@ def get_items():
     return jsonify(rows)
 
 
+@app.route("/items/<item>", methods=["GET"])
+def get_item_focus(item):
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' SELECT a.*, b.title as bron_title, b.logo, b.link_home
+                       FROM Item as a
+                       JOIN Bron as b ON a.bron_id = b.id
+                       WHERE a.id = %s''', [str(item)])
+    mysql.connection.commit()
+    rows = cursor.fetchall()
+    cursor.close()
+    return jsonify(rows)
+
+
 @app.route("/items/uitgelicht", methods=["GET"])
 def get_items_uitgelicht():
     cursor = mysql.connection.cursor()
@@ -115,6 +128,7 @@ def get_item_statistics():
     cursor.close()
     return jsonify(rows)
 
+# TODO items per bron begrenzen
 @app.route("/items/bron/<bron>", methods=["GET"])
 def get_items_per_bron(bron):
     cursor = mysql.connection.cursor()
@@ -225,7 +239,8 @@ def search_items():
                        FROM Item as a 
                        JOIN Bron as b on a.bron_id = b.id 
                        WHERE a.title LIKE %s
-                       ORDER BY a.timestamp_gevonden DESC''', ["%"+search_string+"%"])
+                       ORDER BY a.timestamp_gevonden DESC
+                       LIMIT 100''', ["%"+search_string+"%"])
     mysql.connection.commit()
     rows = cursor.fetchall()
     cursor.close()
