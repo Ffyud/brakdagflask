@@ -9,7 +9,7 @@ timestamp_gevonden INTEGER, description TEXT,
 uitgelicht INTEGER, bron_id INTEGER);
 
 INSERT INTO Bron (title, link_rss, logo, description, link_home) VALUES ('RTV Noord','https://rtvnoord.nl/rss','logos/logo_rtvnoord.png','Het nieuws uit Groningen.','https://www.rtvnoord.nl');
-INSERT INTO Bron (title, link_rss, logo, description, link_home) VALUES ('OOGtv','https://oogtv.nl/rss','logos/logo_oog.png','De stadszender van Groningen.','https://www.oogtv.nl');
+INSERT INTO Bron (title, link_rss, logo, description, link_home) VALUES ('OOGtv','https://oogtv.nl/feed/rss','logos/logo_oog.png','De stadszender van Groningen.','https://www.oogtv.nl');
 INSERT INTO Bron (title, link_rss, logo, description, link_home) VALUES ('Sikkom','https://sikkom.nl/rss','logos/logo_sikkom.png','Nieuws, uitgaan, zin en onzin in Groningen.','https://www.sikkom.nl');
 INSERT INTO Bron (title, link_rss, logo, description, link_home) VALUES ('Groninger Internet Courant','https://www.gic.nl/startpagina/rss','logos/logo_gic.png','Voor Stad en Ommeland. De feiten die tellen. Sinds 1997.','https://www.gic.nl');
 INSERT INTO Bron (title, link_rss, logo, description, link_home) VALUES ('NU.nl Groningen','https://www.nu.nl/rss/groningen','logos/logo_nu.png','Het laatste nieuws het eerst op NU.nl.','https://www.nu.nl');
