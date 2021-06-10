@@ -188,7 +188,7 @@ def post_vergelijkbaar_item():
         cursor.execute(''' INSERT INTO Item_match 
                            (item, item_compare, match_percentage) 
                            VALUES (%s, %s, %s) 
-                           WHERE NOT EXISTS (SELECT * FROM Item_match WHERE item = %s AND item_compare = %s LIMIT 150)''', (item, item_compare, match_percentage, item, item_compare))
+                           ON DUPLICATE KEY UPDATE item = %s ''', (item, item_compare, match_percentage, item))
         mysql.connection.commit()
         cursor.close()
 
