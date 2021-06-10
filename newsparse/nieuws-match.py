@@ -1,6 +1,7 @@
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 import schedule
+import ssl
 import requests
 import logging
 import json
@@ -10,9 +11,14 @@ import sys
 BACKEND = sys.argv[1]
 GET_ITEMS = BACKEND + "/items"
 POST_VERGELIJKING = BACKEND + "/item/vergelijkbaar"
-WAIT_FOR_MINUTES = 30
+WAIT_FOR_MINUTES = 1
 
 def nieuwsVergelijken():
+
+    # monkey-patch het SSL-certificaat probleem
+    if hasattr(ssl, '_create_unverified_context'):
+        ssl._create_default_https_context = ssl._create_unverified_context
+
     custom_header = {"User-Agent": "newsparser"}
     resp = requests.get(GET_ITEMS, headers=custom_header)
 
