@@ -55,6 +55,7 @@ def nieuwsVergelijken():
                         data = respPost.json()
                         if 'vergelijking_ingediend' in data['resultaat']:
                             logging.info("Vergelijking ingediend!")
+                            print("Vergelijking ingediend!")
                         else:
                             logging.critical("Geen goed antwoord op vergelijking!")
                     except ValueError:
