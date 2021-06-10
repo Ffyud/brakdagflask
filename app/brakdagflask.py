@@ -184,19 +184,29 @@ def post_vergelijkbaar_item():
     match_percentage = request_data['match_percentage']
 
     if item and item_compare and match_percentage:
+
         cursor = mysql.connection.cursor()
-        cursor.execute(''' INSERT INTO Item_match 
-                           (item, item_compare, match_percentage) 
-                           VALUES (%s, %s, %s) 
-                           ON DUPLICATE KEY UPDATE item = %s ''', (item, item_compare, match_percentage, item))
+        cursor.execute(''' SELECT a.id
+                        FROM Item_match as a
+                        WHERE a.item = %s 
+                        AND a.item_compare = %s''', (item, item_compare))
         mysql.connection.commit()
+        aantalArtikelenGevonden = len(cursor.fetchall())
         cursor.close()
 
-        return {
-            "resultaat": "vergelijking_ingediend"
-        }
-    else:
-        return "mislukt"
+        if aantalArtikelenGevonden == 0:
+            cursor = mysql.connection.cursor()
+            cursor.execute(''' INSERT INTO Item_match 
+                           (item, item_compare, match_percentage) 
+                           VALUES (%s, %s, %s) ''', (item, item_compare, match_percentage))
+            mysql.connection.commit()
+            cursor.close()
+
+            return {
+                "resultaat": "vergelijking_ingediend"
+            }
+        else:
+            return "mislukt"
 
 
 @app.route("/item", methods=["POST"])
