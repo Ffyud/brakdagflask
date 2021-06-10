@@ -8,7 +8,7 @@ title TEXT, link TEXT, timestamp_publicatie INTEGER,
 timestamp_gevonden INTEGER, description TEXT, 
 uitgelicht INTEGER, bron_id INTEGER);
 
-CREATE TABLE IF NOT EXISTS Item_compare (id INTEGER PRIMARY KEY AUTO_INCREMENT, 
+CREATE TABLE IF NOT EXISTS Item_match (id INTEGER PRIMARY KEY AUTO_INCREMENT, 
 item INTEGER, item_compare INTEGER, match_percentage INTEGER);
 
 INSERT INTO Bron (title, link_rss, logo, description, link_home) VALUES ('RTV Noord','https://rtvnoord.nl/rss','logos/logo_rtvnoord.png','Het nieuws uit Groningen.','https://www.rtvnoord.nl');

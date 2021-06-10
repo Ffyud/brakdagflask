@@ -185,7 +185,7 @@ def post_vergelijkbaar_item():
 
     if item and item_compare and match_percentage:
         cursor = mysql.connection.cursor()
-        cursor.execute(''' INSERT INTO Item_compare 
+        cursor.execute(''' INSERT INTO Item_match 
                            (item, item_compare, match_percentage) 
                            VALUES (%s, %s, %s)''', (item, item_compare, match_percentage))
         mysql.connection.commit()
@@ -196,7 +196,7 @@ def post_vergelijkbaar_item():
         }
     else:
         return "mislukt"
-        
+
 
 @app.route("/item", methods=["POST"])
 # @cross_origin(resources={r"/*": {"origins": ["http://localhost:3000", "-"]}})
