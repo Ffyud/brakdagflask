@@ -102,6 +102,20 @@ def get_item_focus(item):
     return jsonify(rows)
 
 
+@app.route("/items/vergelijkbaar/<item>", methods=["GET"])
+def get_item_vergelijkbaar(item):
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' SELECT b.*, c.title as bron_title, c.logo, c.link_home 
+                       FROM Item_match as a
+                       JOIN Item as b ON a.item_compare = b.id 
+                       JOIN Bron as c ON b.bron_id = c.id
+                       WHERE a.item = %s''', [str(item)])
+    mysql.connection.commit()
+    rows = cursor.fetchall()
+    cursor.close()
+    return jsonify(rows)
+
+
 @app.route("/items/uitgelicht", methods=["GET"])
 def get_items_uitgelicht():
     cursor = mysql.connection.cursor()
@@ -128,7 +142,6 @@ def get_item_statistics():
     cursor.close()
     return jsonify(rows)
 
-# TODO items per bron begrenzen
 @app.route("/items/bron/<bron>", methods=["GET"])
 def get_items_per_bron(bron):
     cursor = mysql.connection.cursor()
@@ -136,7 +149,8 @@ def get_items_per_bron(bron):
                        FROM Item as a 
                        JOIN Bron as b ON a.bron_id = b.id 
                        WHERE b.id = %s 
-                       ORDER BY timestamp_gevonden DESC''', [str(bron)])
+                       ORDER BY timestamp_gevonden DESC
+                       LIMIT 100''', [str(bron)])
     mysql.connection.commit()
     rows = cursor.fetchall()
     cursor.close()
@@ -161,6 +175,28 @@ def get_items_per_datum(datum):
     cursor.close()
     return jsonify(rows)    
 
+
+@app.route("/item/vergelijkbaar", methods=["POST"])
+def post_vergelijkbaar_item():
+    request_data = request.get_json()
+    item = request_data['item']
+    item_compare = request_data['item_compare']
+    match_percentage = request_data['match_percentage']
+
+    if item and item_compare and match_percentage:
+        cursor = mysql.connection.cursor()
+        cursor.execute(''' INSERT INTO Item_compare 
+                           (item, item_compare, match_percentage) 
+                           VALUES (%s, %s, %s)''', (item, item_compare, match_percentage))
+        mysql.connection.commit()
+        cursor.close()
+
+        return {
+            "resultaat": "vergelijking_ingediend"
+        }
+    else:
+        return "mislukt"
+        
 
 @app.route("/item", methods=["POST"])
 # @cross_origin(resources={r"/*": {"origins": ["http://localhost:3000", "-"]}})
