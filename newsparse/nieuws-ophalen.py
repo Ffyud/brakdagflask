@@ -80,6 +80,7 @@ def nieuwsVanBronnenHalen():
         aantalBestaatAlInt = 0
         aantalToegevoegdInt = 0 
         for item in itemAttributenList:
+            time.sleep(5)
             if 'title' in item:
                 itemJson = json.dumps(item)
                 custom_header = {"Content-Type": "application/json"}

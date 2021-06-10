@@ -40,6 +40,7 @@ def nieuwsVergelijken():
             vergelijkLijst = []
             
         for item in itemLijst:
+            time.sleep(5)
             item1 = item['title']
             id1 = item['id']
             for itemVergelijk in vergelijkLijst:
@@ -50,6 +51,7 @@ def nieuwsVergelijken():
                     itemsVergelekenList.append({"item": id1, "item_compare": id2, "match_percentage": vergelijkPercentage})
 
         for item in itemsVergelekenList:
+            time.sleep(5)
             if 'item' in item:
                 itemJson = json.dumps(item)
                 custom_header = {"Content-Type": "application/json"}
@@ -63,7 +65,7 @@ def nieuwsVergelijken():
                             logging.info("Vergelijking ingediend!")
                             print("Vergelijking ingediend!")
                         elif 'vergelijking_bestaat_al' in data['resultaat']:
-                            logging.critical("Vergelijking bestaat al!")
+                            logging.info("Vergelijking bestaat al!")
                     except ValueError:
                         logging.critical("Bij toevoegen vergelijking kwam geen response!")
                         print("Oeps, bij toevoegen vergelijking kwam geen response.")            
