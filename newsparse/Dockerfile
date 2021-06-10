@@ -9,6 +9,7 @@ RUN python -m venv venv
 RUN venv/bin/pip install -r requirements.txt
 
 COPY ./newsparse/nieuws-ophalen.py nieuws-ophalen.py
+COPY ./newsparse/nieuws-match.py nieuws-match.py
 COPY ./newsparse/boot.sh boot.sh
 RUN chmod +x boot.sh
 
