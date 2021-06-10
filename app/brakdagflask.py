@@ -206,7 +206,9 @@ def post_vergelijkbaar_item():
                 "resultaat": "vergelijking_ingediend"
             }
         else:
-            return "mislukt"
+            return {
+                "resultaat": "vergelijking_bestaat_al"
+            }
 
 
 @app.route("/item", methods=["POST"])

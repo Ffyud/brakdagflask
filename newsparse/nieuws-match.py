@@ -62,8 +62,8 @@ def nieuwsVergelijken():
                         if 'vergelijking_ingediend' in data['resultaat']:
                             logging.info("Vergelijking ingediend!")
                             print("Vergelijking ingediend!")
-                        else:
-                            logging.critical("Geen goed antwoord op vergelijking!")
+                        elif 'vergelijking_bestaat_al' in data['resultaat']:
+                            logging.critical("Vergelijking bestaat al!")
                     except ValueError:
                         logging.critical("Bij toevoegen vergelijking kwam geen response!")
                         print("Oeps, bij toevoegen vergelijking kwam geen response.")            
