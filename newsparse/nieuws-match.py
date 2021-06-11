@@ -11,7 +11,7 @@ import sys
 BACKEND = sys.argv[1]
 GET_ITEMS = BACKEND + "/items"
 POST_VERGELIJKING = BACKEND + "/item/vergelijkbaar"
-WAIT_FOR_MINUTES = 1
+WAIT_FOR_MINUTES = 30
 
 def nieuwsVergelijken():
 

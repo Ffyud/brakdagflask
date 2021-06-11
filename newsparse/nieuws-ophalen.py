@@ -53,6 +53,7 @@ def nieuwsVanBronnenHalen():
             bronUrl = b['link_rss']
             print(bronUrl)
             try:
+                feedparser.USER_AGENT = "Brakdag/1.0 +https://brakdag.nl/"
                 bronParse = feedparser.parse(bronUrl)
             except Exception as trace:
                 logging.critical(bronUrl + ' kon niet bereikt worden.')
