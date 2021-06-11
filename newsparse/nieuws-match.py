@@ -47,7 +47,7 @@ def nieuwsVergelijken():
                 item2 = itemVergelijk['title']
                 id2 = itemVergelijk['id']
                 vergelijkPercentage = fuzz.ratio(item1, item2)
-                if(vergelijkPercentage > 53 and vergelijkPercentage < 100):
+                if(vergelijkPercentage > 51 and vergelijkPercentage < 100):
                     itemsVergelekenList.append({"item": id1, "item_compare": id2, "match_percentage": vergelijkPercentage})
 
         for item in itemsVergelekenList:
@@ -66,6 +66,7 @@ def nieuwsVergelijken():
                             print("Vergelijking ingediend!")
                         elif 'vergelijking_bestaat_al' in data['resultaat']:
                             logging.info("Vergelijking bestaat al!")
+                            print("Vergelijking bestaat al!")
                     except ValueError:
                         logging.critical("Bij toevoegen vergelijking kwam geen response!")
                         print("Oeps, bij toevoegen vergelijking kwam geen response.")            
