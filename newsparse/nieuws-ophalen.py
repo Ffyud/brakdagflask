@@ -68,7 +68,7 @@ def nieuwsVanBronnenHalen():
                         logging.critital(f'Antwoord met status {request.status_code} op {bronUrl}.')
                 except Exception as err:
                     print(f'Zowel feedparser als een request is misgegaan voor {bronUrl}.')
-                    logging.critial(f'Misgegaan voor {bronUrl} met: {err}.')
+                    logging.critical(f'Misgegaan met http status {request.status_code} voor {bronUrl} met: {err}.')
                 
             for e in bronParse['entries']:
                 # Zoveel mogelijk opschonen van description
