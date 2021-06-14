@@ -30,35 +30,45 @@ def nieuwsVanBronnenHalen():
     resp = requests.get(GETBRON_VAR, headers=custom_header)
 
     if resp.status_code != 200:
-        logging.critical(resp.status_code)
+        logging.critical(f'Status {resp.status_code} teruggekregen.')
     elif resp.status_code == 200:
-        logging.info('Even geduld tot alle stappen zijn doorlopen.')
-        logging.info('1/6 Lijst met bronnen is opgevraagd.')
-    # TODO afvangen als json er niet is
+        logging.info('Lijst met bronnen is opgevraagd.')
+
     try:
         bronnenLijst = resp.json()
     except ValueError:
-        logging.critical("Bronnen lijst leeg!")
-        print("Oeps, geen bronnen gevonden.")
+        logging.critical("Geen bronnen gevonden!")
+        print("Geen bronnen gevonden.")
         bronnenLijst = []
 
-    logging.info('2/6 Er zijn ' + str(len(bronnenLijst))+ ' bronnen gevonden.')
-    print(str(len(bronnenLijst)) + " bronnen gevonden.")
+    print(f'Er zijn {len(bronnenLijst)} bronnen gevonden.')
 
     if(len(bronnenLijst) != 0):
         data=[]
-        dataAlleBronnen=[]
         itemAttributenList=[]
         for b in bronnenLijst:
             bronUrl = b['link_rss']
-            print(bronUrl)
+            print(f'Bron: {bronUrl}')
+    
             try:
-                # feedparser.USER_AGENT = "Brakdag/1.0 +https://brakdag.nl/"
                 bronParse = feedparser.parse(bronUrl)
             except Exception as trace:
-                logging.critical(bronUrl + ' kon niet bereikt worden.')
-                print("Oeps, " + bronUrl + " kon niet bereikt worden.")
-                print(trace)
+                print(f'{bronUrl} kon niet bereikt worden met feedparser, maar we proberen het met een request.')
+                try:
+                    request = requests.get(bronUrl)
+                    if(request.status_code == 200):
+                        try:
+                            bronParse = feedparser.parse(request.text)
+                            print(f'Er is een antwoord met lengte {len(request.text)} voor {bronUrl}.')
+                        except Exception as rawparse:
+                            print(f'Zelfs met een string werkt de feedparser niet voor {bronUrl}.')
+                            logging.critical(f'Zelfs met een string werkt de feedparser niet voor {bronUrl} met fout: {rawparse}')
+                    else:
+                        print(f'Helaas, antwoord met status {request.status_code} op {bronUrl}.')
+                        logging.critital(f'Antwoord met status {request.status_code} op {bronUrl}.')
+                except Exception as err:
+                    print(f'Zowel feedparser als een request is misgegaan voor {bronUrl}.')
+                    logging.critial(f'Misgegaan voor {bronUrl} met: {err}.')
                 
             for e in bronParse['entries']:
                 # Zoveel mogelijk opschonen van description
@@ -75,13 +85,13 @@ def nieuwsVanBronnenHalen():
 
                 itemAttributenList.append({"title": e.title, "link": e.link, "timestamp_publicatie": timestampPublicatie, "description": descriptionSchoonVanWhiteSpace})
 
-        logging.info('3/6 Er zijn in totaal ' + str(len(itemAttributenList)) + ' items gevonden.')
+        print(f'Er zijn in totaal {len(itemAttributenList)} items gevonden.')
         foutenGevondenList = []
         #  ombatterijen naar int ipv list
         aantalBestaatAlInt = 0
         aantalToegevoegdInt = 0 
         for item in itemAttributenList:
-            time.sleep(5)
+            time.sleep(0.5)
             if 'title' in item:
                 itemJson = json.dumps(item)
                 custom_header = {"Content-Type": "application/json"}
@@ -93,18 +103,21 @@ def nieuwsVanBronnenHalen():
                         data = respPost.json()
                         if 'artikel_bestaat_al' in data['resultaat']:
                             aantalBestaatAlInt += 1
-                        elif 'goed' in data['resultaat']:    
+                            print("-", end = '')
+                        elif 'goed' in data['resultaat']:
                             aantalToegevoegdInt += 1
-                    except ValueError:
-                        logging.critical("Bij toevoegen item kwam geen response!")
-                        print("Oeps, bij toevoegen item kwam geen response.")
+                            print("/", end = '')
+                    except ValueError as err:
+                        logging.critical(f'Bij toevoegen item kwam een fout: {err}')
+                        print(f'Bij toevoegen item kwam een fout: {err}')
 
-        logging.info('\n4/6 Er zijn ' + str(aantalBestaatAlInt) + ' items gevonden die al bekend zijn.')
-        logging.info('5/6 Er zijn ' + str(aantalToegevoegdInt) + ' nieuwe items gevonden.')
+        print(f'Er zijn {aantalBestaatAlInt} items gevonden die al bekend zijn.')
+        print(f'Er zijn {aantalToegevoegdInt} nieuwe items gevonden.')
+
         if len(foutenGevondenList) == 0:
-            logging.info('\n6/6 Nieuwsverzamelen klaar, met 0 fouten.')
+            print(f'Nieuwsverzamelen klaar, met 0 fouten.')
         else:
-            logging.info('Nieuwsverzamelen afgerond met ' + str(len(foutenGevondenList)) + ' fouten.')
+            logging.warn(f'Nieuwsverzamelen afgerond met {len(foutenGevondenList)} fouten.')
             for fout in foutenGevondenList:
                 logging.warning('Fout: ' + fout)
 
