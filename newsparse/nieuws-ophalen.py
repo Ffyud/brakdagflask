@@ -12,7 +12,7 @@ import sys
 BACKEND = sys.argv[1]
 GETBRON_VAR = BACKEND + "/bron"
 POSTITEM_VAR = BACKEND + "/item"
-WAIT_FOR_MINUTES = 5
+WAIT_FOR_MINUTES = 7
 
 def nieuwsVanBronnenHalen():
     nu = datetime.datetime.now()
@@ -90,9 +90,11 @@ def nieuwsVanBronnenHalen():
         #  ombatterijen naar int ipv list
         aantalBestaatAlInt = 0
         aantalToegevoegdInt = 0 
+        i = len(itemAttributenList)
         for item in itemAttributenList:
             time.sleep(0.5)
             if 'title' in item:
+                i = i-1
                 itemJson = json.dumps(item)
                 custom_header = {"Content-Type": "application/json"}
                 respPost = requests.post(POSTITEM_VAR, data=itemJson, headers=custom_header)
@@ -103,10 +105,13 @@ def nieuwsVanBronnenHalen():
                         data = respPost.json()
                         if 'artikel_bestaat_al' in data['resultaat']:
                             aantalBestaatAlInt += 1
-                            print("-", end = '')
+                            print(f'{i} x')
                         elif 'goed' in data['resultaat']:
                             aantalToegevoegdInt += 1
-                            print("/", end = '')
+                            print(f'{i} v')
+                        else:
+                            logging.critical(f'Het antwoord op item toevoegen was niet goed.')
+                                   
                     except ValueError as err:
                         logging.critical(f'Bij toevoegen item kwam een fout: {err}')
                         print(f'Bij toevoegen item kwam een fout: {err}')
