@@ -3,3 +3,4 @@ requests
 datetime
 schedule
 fuzzywuzzy
+urllib3
