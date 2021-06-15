@@ -27,12 +27,15 @@ def nieuwsVanBronnenHalen():
         ssl._create_default_https_context = ssl._create_unverified_context
     
     custom_header = {"User-Agent": "newsparser"}
-    resp = requests.get(GETBRON_VAR, headers=custom_header)
+    try:
+        resp = requests.get(GETBRON_VAR, headers=custom_header)
 
-    if resp.status_code != 200:
-        logging.critical(f'Status {resp.status_code} teruggekregen.')
-    elif resp.status_code == 200:
-        logging.info('Lijst met bronnen is opgevraagd.')
+        if resp.status_code != 200:
+            logging.critical(f'Status {resp.status_code} teruggekregen.')
+        elif resp.status_code == 200:
+            logging.info('Lijst met bronnen is opgevraagd.')
+    except Exception as err:
+        logging.critical(f'Bevragen van bronnen mislukt, service lijkt stuk!')
 
     try:
         bronnenLijst = resp.json()
