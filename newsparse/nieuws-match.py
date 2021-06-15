@@ -2,6 +2,7 @@ from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 import schedule
 import ssl
+import datetime
 import requests
 import logging
 import json
@@ -14,6 +15,10 @@ POST_VERGELIJKING = BACKEND + "/item/vergelijkbaar"
 WAIT_FOR_MINUTES = 30
 
 def nieuwsVergelijken():
+    nu = datetime.datetime.now()
+    print("Van start met vergelijken op " + nu.strftime("%H:%M") + ".")
+    print("Nieuws vergelijken begint over " + str(WAIT_FOR_MINUTES) + " minuten weer.")
+    logging.basicConfig(filename='nieuws-match.log', level=logging.INFO)
 
     # monkey-patch het SSL-certificaat probleem
     if hasattr(ssl, '_create_unverified_context'):
@@ -22,11 +27,10 @@ def nieuwsVergelijken():
     custom_header = {"User-Agent": "newsparser"}
     resp = requests.get(GET_ITEMS, headers=custom_header)
 
-    logging.info('Items ophalen en vergelijken.')
-
     if resp.status_code != 200:
-        logging.critical(resp.status_code)
+        logging.critical(f'Status {resp.status_code} teruggekregen voor bevragen items.')
     elif resp.status_code == 200:
+        logging.info('Lijst met items ter vergelijking opgevraagd.')
         itemsVergelekenList = []
 
         try:
@@ -34,8 +38,8 @@ def nieuwsVergelijken():
             vergelijkLijst = resp.json()
             logging.info("Items gevonden om te vergelijken.")
         except ValueError:
-            logging.critical("Geen items gevonden!")
-            print("Oeps, geen items gevonden.")
+            logging.critical("Vergelijking mislukt, want geen items gevonden!")
+            print("Vergelijking mislukt, want geen items gevonden.")
             itemLijst = []
             vergelijkLijst = []
             
@@ -57,7 +61,7 @@ def nieuwsVergelijken():
                 custom_header = {"Content-Type": "application/json"}
                 respPost = requests.post(POST_VERGELIJKING, data=itemJson, headers=custom_header)
                 if respPost.status_code != 200:
-                    logging.critical(resp.status_code)
+                    logging.critical(f'Status {resp.status_code} teruggekregen voor toevoegen vergeleken item.')
                 elif respPost.status_code == 200:
                     try:
                         data = respPost.json()
