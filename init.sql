@@ -1,3 +1,8 @@
+USE mysql;
+
+DELETE FROM mysql.user WHERE  user = 'root' AND host IN ('localhost', '127.0.0.1', '::1'); 
+FLUSH PRIVILEGES;
+
 USE brakdag;
 
 CREATE TABLE IF NOT EXISTS Bron (id INTEGER PRIMARY KEY AUTO_INCREMENT, 
