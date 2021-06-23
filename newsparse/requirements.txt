@@ -4,4 +4,3 @@ datetime
 schedule
 fuzzywuzzy
 urllib3
-dotenv
