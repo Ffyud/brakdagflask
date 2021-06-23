@@ -14,6 +14,9 @@ from bron_model import BronSchema
 from item_service import ItemService
 from item_model import ItemSchema
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
 
 DATA_PATH = "./database"
 
@@ -24,7 +27,7 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'db'
 app.config['MYSQL_USER'] = 'brakdag'
-app.config['MYSQL_PASSWORD'] = 'brakdag'
+app.config['MYSQL_PASSWORD'] = os.getenv('DB_BRAKDAG_PASS')
 app.config['MYSQL_DB'] = 'brakdag'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
