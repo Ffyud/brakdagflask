@@ -39,7 +39,7 @@ def nieuwsVanBronnenHalen():
 
     try:
         bronnenLijst = resp.json()
-    except ValueError:
+    except Exception:
         logging.critical("Geen bronnen gevonden!")
         print("Geen bronnen gevonden.")
         bronnenLijst = []
