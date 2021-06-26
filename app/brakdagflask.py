@@ -105,6 +105,25 @@ def get_item_focus(item):
     return jsonify(rows)
 
 
+@app.route("/items/aantal/<aantal>", methods=["GET"])
+def get_item_aantal(aantal):
+    if(aantal > 1000):
+        count = 1000
+    else:
+        count = aantal
+
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' SELECT a.*, b.title as bron_title, b.logo, b.link_home
+                       FROM Item as a
+                       JOIN Bron as b ON a.bron_id = b.id
+                       ORDER BY a.timestamp_gevonden DESC
+                       LIMIT %a''', [str(count)])
+    mysql.connection.commit()
+    rows = cursor.fetchall()
+    cursor.close()
+    return jsonify(rows)
+
+
 @app.route("/items/vergelijkbaar/<item>", methods=["GET"])
 def get_item_vergelijkbaar(item):
     cursor = mysql.connection.cursor()
