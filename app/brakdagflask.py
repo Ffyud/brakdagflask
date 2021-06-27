@@ -116,8 +116,7 @@ def get_item_aantal(aantal):
     cursor.execute(''' SELECT a.*, b.title as bron_title, b.logo, b.link_home
                        FROM Item as a
                        JOIN Bron as b ON a.bron_id = b.id
-                       ORDER BY a.timestamp_gevonden DESC
-                       LIMIT %s''', [str(count)])
+                       ORDER BY a.timestamp_gevonden DESC LIMIT %d''', [count])
     mysql.connection.commit()
     rows = cursor.fetchall()
     cursor.close()
