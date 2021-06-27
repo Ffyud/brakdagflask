@@ -100,24 +100,29 @@ def nieuwsVanBronnenHalen():
                 i = i-1
                 itemJson = json.dumps(item)
                 custom_header = {"Content-Type": "application/json"}
-                respPost = requests.post(POSTITEM_VAR, data=itemJson, headers=custom_header)
-                if respPost.status_code != 200:
-                    foutenGevondenList.append(item['title'])
-                elif respPost.status_code == 200:
-                    try:
-                        data = respPost.json()
-                        if 'artikel_bestaat_al' in data['resultaat']:
-                            aantalBestaatAlInt += 1
-                            print(f'{i} x')
-                        elif 'goed' in data['resultaat']:
-                            aantalToegevoegdInt += 1
-                            print(f'{i} v')
-                        else:
-                            logging.critical(f'Het antwoord op item toevoegen was niet goed.')
-                                   
-                    except ValueError as err:
-                        logging.critical(f'Bij toevoegen item kwam een fout: {err}')
-                        print(f'Bij toevoegen item kwam een fout: {err}')
+                try:
+                    respPost = requests.post(POSTITEM_VAR, data=itemJson, headers=custom_header)
+                    if respPost.status_code != 200:
+                        foutenGevondenList.append(item['title'])
+                    elif respPost.status_code == 200:
+                        try:
+                            data = respPost.json()
+                            if 'artikel_bestaat_al' in data['resultaat']:
+                                aantalBestaatAlInt += 1
+                                print(f'{i} x')
+                            elif 'goed' in data['resultaat']:
+                                aantalToegevoegdInt += 1
+                                print(f'{i} v')
+                            else:
+                                logging.critical(f'Het antwoord op item toevoegen was niet goed.')
+                                    
+                        except ValueError as err:
+                            logging.critical(f'Bij toevoegen item kwam een fout: {err}')
+                            print(f'Bij toevoegen item kwam een fout: {err}')
+                except Exception as err:
+                    logging.critical(f'Mis gegaan met posten van artikel: {err}')
+                    print(f'Mis gegaan met posten van artikel: {err}')
+
 
         print(f'Er zijn {aantalBestaatAlInt} items gevonden die al bekend zijn.')
         print(f'Er zijn {aantalToegevoegdInt} nieuwe items gevonden.')
