@@ -107,10 +107,10 @@ def get_item_focus(item):
 
 @app.route("/items/aantal/<aantal>", methods=["GET"])
 def get_item_aantal(aantal):
-    if(aantal > 1000):
+    if(int(aantal) > 1000):
         count = 1000
     else:
-        count = aantal
+        count = int(aantal)
 
     cursor = mysql.connection.cursor()
     cursor.execute(''' SELECT a.*, b.title as bron_title, b.logo, b.link_home
