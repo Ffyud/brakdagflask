@@ -10,8 +10,9 @@ import time
 import sys
 
 BACKEND = sys.argv[1]
-GET_ITEMS = BACKEND + "/items"
-POST_VERGELIJKING = BACKEND + "/item/vergelijkbaar"
+AANTAL_ITEMS = 300
+GET_ITEMS = f'{BACKEND}/items/aantal/{AANTAL_ITEMS}'
+POST_VERGELIJKING = f'{BACKEND}/item/vergelijkbaar'
 WAIT_FOR_MINUTES = 30
 
 def nieuwsVergelijken():
@@ -19,8 +20,8 @@ def nieuwsVergelijken():
 
     nu = datetime.datetime.now()
     
-    print(f'Van start met vergelijken op {nu.strftime("%H:%M")}.')
-    logging.info(f'Van start met vergelijken op {nu.strftime("%H:%M")}.')
+    print(f'Van start met vergelijken van {str(AANTAL_ITEMS)} artikelen op {nu.strftime("%H:%M")}.')
+    logging.info(f'Van start met vergelijken {str(AANTAL_ITEMS)} artikelen op {nu.strftime("%H:%M")}.')
     print(f'Nieuws vergelijken begint over {str(WAIT_FOR_MINUTES)} minuten weer.')
     logging.info(f'Nieuws vergelijken begint over {str(WAIT_FOR_MINUTES)} minuten weer.')
 
