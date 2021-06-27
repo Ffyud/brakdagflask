@@ -15,10 +15,14 @@ POST_VERGELIJKING = BACKEND + "/item/vergelijkbaar"
 WAIT_FOR_MINUTES = 30
 
 def nieuwsVergelijken():
-    nu = datetime.datetime.now()
-    print("Van start met vergelijken op " + nu.strftime("%H:%M") + ".")
-    print("Nieuws vergelijken begint over " + str(WAIT_FOR_MINUTES) + " minuten weer.")
     logging.basicConfig(filename='nieuws-match.log', level=logging.INFO)
+
+    nu = datetime.datetime.now()
+    
+    print(f'Van start met vergelijken op {nu.strftime("%H:%M")}.')
+    logging.info(f'Van start met vergelijken op {nu.strftime("%H:%M")}.')
+    print(f'Nieuws vergelijken begint over {str(WAIT_FOR_MINUTES)} minuten weer.')
+    logging.info(f'Nieuws vergelijken begint over {str(WAIT_FOR_MINUTES)} minuten weer.')
 
     # monkey-patch het SSL-certificaat probleem
     if hasattr(ssl, '_create_unverified_context'):
@@ -33,7 +37,7 @@ def nieuwsVergelijken():
             logging.critical(f'Status {resp.status_code} teruggekregen voor bevragen items.')
         elif resp.status_code == 200:
             logging.info('Lijst met items ter vergelijking opgevraagd.')
-    except Exception as err:    
+    except Exception:    
         logging.critical(f'Bevragen van bronnen mislukt, service lijkt stuk!')
 
     itemsVergelekenList = []
@@ -42,25 +46,26 @@ def nieuwsVergelijken():
         itemLijst = resp.json()
         vergelijkLijst = resp.json()
         logging.info("Items gevonden om te vergelijken.")
-    except ValueError:
+    except Exception:
         logging.critical("Vergelijking mislukt, want geen items gevonden!")
         print("Vergelijking mislukt, want geen items gevonden.")
         itemLijst = []
         vergelijkLijst = []
             
     for item in itemLijst:
-        time.sleep(5)
+        time.sleep(1)
         item1 = item['title']
         id1 = item['id']
         for itemVergelijk in vergelijkLijst:
             item2 = itemVergelijk['title']
             id2 = itemVergelijk['id']
-            vergelijkPercentage = fuzz.ratio(item1, item2)
-            if(vergelijkPercentage > 51 and vergelijkPercentage < 100):
+            vergelijkPercentage = fuzz.token_sort_ratio(item1.lower(), item2.lower())
+            if(vergelijkPercentage > 60 and vergelijkPercentage < 100):
+                print(f'Artikel {id1} met artikel {id2} heeft ratio {vergelijkPercentage}.')
                 itemsVergelekenList.append({"item": id1, "item_compare": id2, "match_percentage": vergelijkPercentage})
 
     for item in itemsVergelekenList:
-        time.sleep(5)
+        time.sleep(1)
         if 'item' in item:
             itemJson = json.dumps(item)
             custom_header = {"Content-Type": "application/json"}
