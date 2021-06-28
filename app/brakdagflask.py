@@ -178,7 +178,7 @@ def get_items_per_bron(bron):
     return jsonify(rows)
 
 
-@app.route("/items/<datum>", methods=["GET"])
+@app.route("/items/datum/<datum>", methods=["GET"])
 def get_items_per_datum(datum):
     a_datetime = dt.datetime.strptime(datum, "%d-%m-%Y") 
     timestamp_datum = int(a_datetime.timestamp())
