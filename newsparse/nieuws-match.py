@@ -10,10 +10,10 @@ import time
 import sys
 
 BACKEND = sys.argv[1]
-AANTAL_ITEMS = 300
+AANTAL_ITEMS = 500
 GET_ITEMS = f'{BACKEND}/items/aantal/{AANTAL_ITEMS}'
 POST_VERGELIJKING = f'{BACKEND}/item/vergelijkbaar'
-WAIT_FOR_MINUTES = 30
+WAIT_FOR_MINUTES = 25
 
 def nieuwsVergelijken():
     logging.basicConfig(filename='nieuws-match.log', level=logging.INFO)
@@ -61,7 +61,7 @@ def nieuwsVergelijken():
             item2 = itemVergelijk['title']
             id2 = itemVergelijk['id']
             vergelijkPercentage = fuzz.token_sort_ratio(item1.lower(), item2.lower())
-            if(vergelijkPercentage > 60 and vergelijkPercentage < 100):
+            if(vergelijkPercentage > 53 and vergelijkPercentage < 100):
                 print(f'Artikel {id1} met artikel {id2} heeft ratio {vergelijkPercentage}.')
                 itemsVergelekenList.append({"item": id1, "item_compare": id2, "match_percentage": vergelijkPercentage})
 
