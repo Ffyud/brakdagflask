@@ -61,7 +61,7 @@ def nieuwsVergelijken():
             item2 = itemVergelijk['title']
             id2 = itemVergelijk['id']
             vergelijkPercentage = fuzz.token_sort_ratio(item1.lower(), item2.lower())
-            if(vergelijkPercentage > 53 and vergelijkPercentage < 100):
+            if(vergelijkPercentage > 55 and vergelijkPercentage < 100):
                 print(f'Artikel {id1} met artikel {id2} heeft ratio {vergelijkPercentage}.')
                 itemsVergelekenList.append({"item": id1, "item_compare": id2, "match_percentage": vergelijkPercentage})
 
