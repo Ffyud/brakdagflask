@@ -9,10 +9,6 @@ from urllib.parse import urlparse
 import os
 import time
 import logging
-from bron_service import BronService
-from bron_model import BronSchema
-from item_service import ItemService
-from item_model import ItemSchema
 import json
 from dotenv import load_dotenv
 
