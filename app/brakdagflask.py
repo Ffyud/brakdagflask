@@ -18,11 +18,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATA_PATH = "./database"
-
-if os.path.exists(DATA_PATH) == False:
-    os.mkdir(DATA_PATH)
-
 app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'db'
@@ -36,7 +31,6 @@ mysql = MySQL(app)
 # Cors moet weg in productie
 CORS(app)
 # cors = CORS(app, resources={r"/*": {"origins": "http://95.217.165.225:1337"}})
-
 
 @app.route("/")
 def welkom():
@@ -310,7 +304,7 @@ def search_items():
                        JOIN Bron as b on a.bron_id = b.id 
                        WHERE a.title LIKE %s
                        ORDER BY a.timestamp_gevonden DESC
-                       LIMIT 100''', ["%"+search_string+"%"])
+                       LIMIT 3000''', ["%"+search_string+"%"])
     mysql.connection.commit()
     rows = cursor.fetchall()
     cursor.close()
