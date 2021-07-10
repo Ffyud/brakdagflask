@@ -346,6 +346,4 @@ def search_items():
 #     return jsonify(ItemService().selectAll())
 
 if __name__ == "__main__":
-    BronSchema()
-    ItemSchema()
     app.run()
