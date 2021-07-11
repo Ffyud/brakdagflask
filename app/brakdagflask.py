@@ -299,7 +299,7 @@ def search_items():
                        FROM Item as a 
                        JOIN Bron as b on a.bron_id = b.id 
                        WHERE a.title LIKE %s
-                       ORDER BY a.timestamp_gevonden DESC
+                       ORDER BY a.timestamp_publicatie DESC
                        LIMIT 3000''', ["%"+search_string+"%"])
     mysql.connection.commit()
     rows = cursor.fetchall()
