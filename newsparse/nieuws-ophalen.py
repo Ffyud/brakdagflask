@@ -1,4 +1,5 @@
 import feedparser
+import html
 import ssl
 import json
 import requests
@@ -86,7 +87,10 @@ def nieuwsVanBronnenHalen():
                 element = datetime.datetime.strptime(publicatieDatumZonderTimeZone, publicatieDatumTemplate)
                 timestampPublicatie = int(datetime.datetime.timestamp(element)) 
 
-                itemAttributenList.append({"title": e.title, "link": e.link, "timestamp_publicatie": timestampPublicatie, "description": descriptionSchoonVanWhiteSpace})
+                title = html.unescape(e.title)
+                descriptionUnescaped = html.unescape(descriptionSchoonVanWhiteSpace)
+
+                itemAttributenList.append({"title": title, "link": e.link, "timestamp_publicatie": timestampPublicatie, "description": descriptionUnescaped})
 
         print(f'Er zijn in totaal {len(itemAttributenList)} items gevonden.')
         foutenGevondenList = []
