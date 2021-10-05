@@ -40,21 +40,6 @@ services:
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: ${DB_BRAKDAG_PASS}
-  # nginx:
-  #   build: 
-  #     context: .
-  #     dockerfile: nginx/Dockerfile
-  #   container_name: nginx
-  #   restart: always
-  #   networks:
-  #     - brakdag-network
-  #   ports:
-  #     - '80:80'
-  #   image: 'nginx:latest'
-  #   depends_on:
-  #     - brakdagflask
-  #     - db
-  #     - phpmyadmin
   newsparse:
     build:
       context: .
