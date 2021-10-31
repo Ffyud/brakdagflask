@@ -160,7 +160,7 @@ def get_items_per_bron(bron):
                        FROM Item as a 
                        JOIN Bron as b ON a.bron_id = b.id 
                        WHERE b.id = %s 
-                       ORDER BY timestamp_gevonden DESC
+                       ORDER BY timestamp_publicatie DESC
                        LIMIT 100''', [str(bron)])
     mysql.connection.commit()
     rows = cursor.fetchall()
