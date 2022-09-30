@@ -57,6 +57,26 @@ services:
     image: 'newsparse:latest'
     depends_on:
       - brakdagflask
+  swag:
+    cap_add:
+      - NET_ADMIN
+    container_name: swag
+    networks:
+      - brakdag-network
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - URL=brakdag.nl
+      - SUBDOMAINS=www, brakdagflask
+      - VALIDATION=http
+    image: 'ghcr.io/linuxserver/swag'
+    ports:
+      - '443:443'
+      - '80:80'
+    restart: unless-stopped
+    volumes:
+      - '${PWD}/swag:/config'      
 volumes:
   db_data:
 networks:
