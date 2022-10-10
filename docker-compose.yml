@@ -68,7 +68,7 @@ services:
       - PGID=1000
       - TZ=Europe/London
       - URL=brakdag.nl
-      - SUBDOMAINS=www, brakdagflask
+      - SUBDOMAINS=brakdagflask
       - ONLY_SUBDOMAINS=true
       - VALIDATION=http
     image: 'ghcr.io/linuxserver/swag'
