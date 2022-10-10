@@ -69,6 +69,7 @@ services:
       - TZ=Europe/London
       - URL=brakdag.nl
       - SUBDOMAINS=www, brakdagflask
+      - ONLY_SUBDOMAINS=true
       - VALIDATION=http
     image: 'ghcr.io/linuxserver/swag'
     ports:
