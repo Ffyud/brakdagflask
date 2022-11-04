@@ -10,6 +10,11 @@ services:
     expose:
       - '5000'
     image: 'brakdagflask:latest'
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "10m"
   db:
     image: mysql:5.7
     volumes:
@@ -57,6 +62,11 @@ services:
     image: 'newsparse:latest'
     depends_on:
       - brakdagflask
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "10m"
   swag:
     cap_add:
       - NET_ADMIN
