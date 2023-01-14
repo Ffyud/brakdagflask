@@ -33,6 +33,11 @@ services:
       - '3306:3306'
     expose:
       - '3306'
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "3"
+        max-size: "10m"  
   phpmyadmin:
     depends_on:
       - db
@@ -87,7 +92,7 @@ services:
       - '80:80'
     restart: unless-stopped
     volumes:
-      - '${PWD}/swag:/config'      
+      - '${PWD}/swag:/config'
 volumes:
   db_data:
 networks:
