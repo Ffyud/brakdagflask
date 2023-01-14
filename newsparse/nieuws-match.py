@@ -10,20 +10,15 @@ import time
 import sys
 
 BACKEND = sys.argv[1]
-AANTAL_ITEMS = 500
+AANTAL_ITEMS = 250
 GET_ITEMS = f'{BACKEND}/items/aantal/{AANTAL_ITEMS}'
 POST_VERGELIJKING = f'{BACKEND}/item/vergelijkbaar'
-WAIT_FOR_MINUTES = 25
+WAIT_FOR_MINUTES = 45
 
-def nieuwsVergelijken():
+def nieuws_vergelijken():
     logging.basicConfig(filename='nieuws-match.log', level=logging.INFO)
 
     nu = datetime.datetime.now()
-    
-    print(f'Van start met vergelijken van {str(AANTAL_ITEMS)} artikelen op {nu.strftime("%H:%M")}.')
-    logging.info(f'Van start met vergelijken {str(AANTAL_ITEMS)} artikelen op {nu.strftime("%H:%M")}.')
-    print(f'Nieuws vergelijken begint over {str(WAIT_FOR_MINUTES)} minuten weer.')
-    logging.info(f'Nieuws vergelijken begint over {str(WAIT_FOR_MINUTES)} minuten weer.')
 
     # monkey-patch het SSL-certificaat probleem
     if hasattr(ssl, '_create_unverified_context'):
@@ -36,62 +31,48 @@ def nieuwsVergelijken():
 
         if resp.status_code != 200:
             logging.critical(f'Status {resp.status_code} teruggekregen voor bevragen items.')
-        elif resp.status_code == 200:
-            logging.info('Lijst met items ter vergelijking opgevraagd.')
     except Exception:    
         logging.critical(f'Bevragen van bronnen mislukt, service lijkt stuk!')
 
-    itemsVergelekenList = []
+    vergeleken_items = []
 
     try:
-        itemLijst = resp.json()
-        vergelijkLijst = resp.json()
-        logging.info("Items gevonden om te vergelijken.")
+        item_lijst = resp.json()
+        vergelijk_lijst = resp.json()
     except Exception:
         logging.critical("Vergelijking mislukt, want geen items gevonden!")
-        print("Vergelijking mislukt, want geen items gevonden.")
-        itemLijst = []
-        vergelijkLijst = []
+        item_lijst = []
+        vergelijk_lijst = []
             
-    for item in itemLijst:
+    for item in item_lijst:
         time.sleep(1)
         item1 = item['title']
         id1 = item['id']
-        for itemVergelijk in vergelijkLijst:
-            item2 = itemVergelijk['title']
-            id2 = itemVergelijk['id']
-            vergelijkPercentage = fuzz.token_sort_ratio(item1.lower(), item2.lower())
-            if(vergelijkPercentage > 55 and vergelijkPercentage < 100):
-                print(f'Artikel {id1} met artikel {id2} heeft ratio {vergelijkPercentage}.')
-                itemsVergelekenList.append({"item": id1, "item_compare": id2, "match_percentage": vergelijkPercentage})
+        for item_vergelijk in vergelijk_lijst:
+            item2 = item_vergelijk['title']
+            id2 = item_vergelijk['id']
+            match_percentage = fuzz.token_sort_ratio(item1.lower(), item2.lower())
+            if(match_percentage > 55 and match_percentage < 100):
+                vergeleken_items.append({"item": id1, "item_compare": id2, "match_percentage": match_percentage})
 
-    for item in itemsVergelekenList:
+    for item in vergeleken_items:
         time.sleep(1)
         if 'item' in item:
-            itemJson = json.dumps(item)
+            item_json = json.dumps(item)
             custom_header = {"Content-Type": "application/json"}
             try:
-                respPost = requests.post(POST_VERGELIJKING, data=itemJson, headers=custom_header)
-                if respPost.status_code != 200:
+                post_response = requests.post(POST_VERGELIJKING, data=item_json, headers=custom_header)
+                if post_response.status_code != 200:
                     logging.critical(f'Status {resp.status_code} teruggekregen voor toevoegen vergeleken item.')
-                elif respPost.status_code == 200:
-                    logging.info(f'Toevoegen van vergelijken is gelukt')
             except:
                 logging.critical(f'Toevoegen vergelijking mislukt, service lijkt stuk!')
 
             try:
-                data = respPost.json()
-                if 'vergelijking_ingediend' in data['resultaat']:
-                    logging.info("Vergelijking ingediend!")
-                    print("Vergelijking ingediend!")
-                elif 'vergelijking_bestaat_al' in data['resultaat']:
-                    logging.info("Vergelijking bestaat al!")
-                    print("Vergelijking bestaat al!")
+                data = post_response.json()
             except ValueError:
                 logging.critical("Bij toevoegen vergelijking kwam geen response!")
-                print("Oeps, bij toevoegen vergelijking kwam geen response.")            
 
-schedule.every(WAIT_FOR_MINUTES).minutes.do(nieuwsVergelijken)
+schedule.every(WAIT_FOR_MINUTES).minutes.do(nieuws_vergelijken)
 
 if __name__ == "__main__":
     while True:

@@ -15,13 +15,9 @@ GETBRON_VAR = BACKEND + "/bron"
 POSTITEM_VAR = BACKEND + "/item"
 WAIT_FOR_MINUTES = 7
 
-def nieuwsVanBronnenHalen():
+def nieuws_van_bronnen_halen():
     nu = datetime.datetime.now()
-    print("Van start op " + nu.strftime("%H:%M") + ".")
-    print("Nieuws ophalen begint over " + str(WAIT_FOR_MINUTES) + " minuten weer.")
     logging.basicConfig(filename='nieuws-ophalen.log', level=logging.INFO)
-
-    logging.info("Het endpoint is '" + BACKEND + "'.")
 
     # monkey-patch het SSL-certificaat probleem
     if hasattr(ssl, '_create_unverified_context'):
@@ -33,112 +29,90 @@ def nieuwsVanBronnenHalen():
 
         if resp.status_code != 200:
             logging.critical(f'Status {resp.status_code} teruggekregen.')
-        elif resp.status_code == 200:
-            logging.info('Lijst met bronnen is opgevraagd.')
     except Exception as err:
         logging.critical(f'Bevragen van bronnen mislukt, service lijkt stuk!')
 
     try:
-        bronnenLijst = resp.json()
+        bronnen_lijst = resp.json()
     except Exception:
         logging.critical("Geen bronnen gevonden!")
-        print("Geen bronnen gevonden.")
-        bronnenLijst = []
+        bronnen_lijst = []
 
-    print(f'Er zijn {len(bronnenLijst)} bronnen gevonden.')
-
-    if(len(bronnenLijst) != 0):
+    if(len(bronnen_lijst) != 0):
         data=[]
-        itemAttributenList=[]
-        for b in bronnenLijst:
-            bronUrl = b['link_rss']
-            print(f'Bron: {bronUrl}')
+        item_attributen=[]
+        for b in bronnen_lijst:
+            bron_url = b['link_rss']
     
             try:
-                bronParse = feedparser.parse(bronUrl)
+                bron_parse = feedparser.parse(bron_url)
             except Exception:
-                print(f'{bronUrl} kon niet bereikt worden met feedparser, maar we proberen het met een request.')
+                logging.critical(f'{bron_url} kon niet bereikt worden met feedparser, maar we proberen het met een request.')
                 try:
-                    request = requests.get(bronUrl)
+                    request = requests.get(bron_url)
                     if(request.status_code == 200):
                         try:
-                            bronParse = feedparser.parse(request.text)
-                            print(f'Er is een antwoord met lengte {len(request.text)} voor {bronUrl}.')
+                            bron_parse = feedparser.parse(request.text)
                         except Exception as rawparse:
-                            print(f'Zelfs met een string werkt de feedparser niet voor {bronUrl}.')
-                            logging.critical(f'Zelfs met een string werkt de feedparser niet voor {bronUrl} met fout: {rawparse}')
+                            logging.critical(f'Zelfs met een string werkt de feedparser niet voor {bron_url} met fout: {rawparse}')
                     else:
-                        print(f'Helaas, antwoord met status {request.status_code} op {bronUrl}.')
-                        logging.critital(f'Antwoord met status {request.status_code} op {bronUrl}.')
+                        logging.critital(f'Antwoord met status {request.status_code} op {bron_url}.')
                 except Exception as err:
-                    print(f'Zowel feedparser als een request is misgegaan voor {bronUrl}.')
-                    logging.critical(f'Misgegaan voor {bronUrl} met: {err}.')
+                    logging.critical(f'Misgegaan voor {bron_url} met: {err}.')
                 
-            for e in bronParse['entries']:
+            for e in bron_parse['entries']:
                 # Zoveel mogelijk opschonen van description
-                opruimenHtmlTags = re.compile('<.*?>')
-                descriptionSchoonVanHtml = re.sub(opruimenHtmlTags, '', e.description)
-                descriptionSchoonEscaped = descriptionSchoonVanHtml.replace('"','\\"')
-                descriptionSchoonVanWhiteSpace = descriptionSchoonEscaped.replace("&nbsp", "").strip()
+                opruimen_html = re.compile('<.*?>')
+                descr_zonder_html = re.sub(opruimen_html, '', e.description)
+                descr_zonder_escape = descr_zonder_html.replace('"','\\"')
+                descr_zonder_whitespace = descr_zonder_escape.replace("&nbsp", "").strip()
 
                 # Publicatiedatum omzetten naar een timestamp
-                publicatieDatumZonderTimeZone = ' '.join(e.published.split(' ')[:-1])
-                publicatieDatumTemplate = '%a, %d %b %Y %H:%M:%S'
-                element = datetime.datetime.strptime(publicatieDatumZonderTimeZone, publicatieDatumTemplate)
-                timestampPublicatie = int(datetime.datetime.timestamp(element)) 
+                pubdate_zonder_timezone = ' '.join(e.published.split(' ')[:-1])
+                pubdate_format = '%a, %d %b %Y %H:%M:%S'
+                item_datetime = datetime.datetime.strptime(pubdate_zonder_timezone, pubdate_format)
+                item_timestamp_pubdate = int(datetime.datetime.timestamp(item_datetime)) 
 
                 title = html.unescape(e.title)
-                descriptionUnescaped = html.unescape(descriptionSchoonVanWhiteSpace)
+                descr_unescaped = html.unescape(descr_zonder_whitespace)
 
-                itemAttributenList.append({"title": title, "link": e.link, "timestamp_publicatie": timestampPublicatie, "description": descriptionUnescaped})
+                item_attributen.append({"title": title, "link": e.link, "timestamp_publicatie": item_timestamp_pubdate, "description": descr_unescaped})
 
-        print(f'Er zijn in totaal {len(itemAttributenList)} items gevonden.')
-        foutenGevondenList = []
+        fouten_gevonden = []
         #  ombatterijen naar int ipv list
-        aantalBestaatAlInt = 0
-        aantalToegevoegdInt = 0 
-        i = len(itemAttributenList)
-        for item in itemAttributenList:
+        aantal_al_bestaand = 0
+        aantal_toegevoegd = 0 
+        i = len(item_attributen)
+        for item in item_attributen:
             time.sleep(0.5)
             if 'title' in item:
                 i = i-1
                 itemJson = json.dumps(item)
                 custom_header = {"Content-Type": "application/json"}
                 try:
-                    respPost = requests.post(POSTITEM_VAR, data=itemJson, headers=custom_header)
-                    if respPost.status_code != 200:
-                        foutenGevondenList.append(item['title'])
-                    elif respPost.status_code == 200:
+                    post_response = requests.post(POSTITEM_VAR, data=itemJson, headers=custom_header)
+                    if post_response.status_code != 200:
+                        fouten_gevonden.append(item['title'])
+                    elif post_response.status_code == 200:
                         try:
-                            data = respPost.json()
+                            data = post_response.json()
                             if 'artikel_bestaat_al' in data['resultaat']:
-                                aantalBestaatAlInt += 1
-                                print(f'{i} x')
+                                aantal_al_bestaand += 1
                             elif 'goed' in data['resultaat']:
-                                aantalToegevoegdInt += 1
-                                print(f'{i} v')
+                                aantal_toegevoegd += 1
                             else:
                                 logging.critical(f'Het antwoord op item toevoegen was niet goed.')
-                                    
                         except ValueError as err:
                             logging.critical(f'Bij toevoegen item kwam een fout: {err}')
-                            print(f'Bij toevoegen item kwam een fout: {err}')
                 except Exception as err:
                     logging.critical(f'Mis gegaan met posten van artikel: {err}')
-                    print(f'Mis gegaan met posten van artikel: {err}')
 
-
-        print(f'Er zijn {aantalBestaatAlInt} items gevonden die al bekend zijn.')
-        print(f'Er zijn {aantalToegevoegdInt} nieuwe items gevonden.')
-
-        if len(foutenGevondenList) == 0:
-            print(f'Nieuwsverzamelen klaar, met 0 fouten.')
-        else:
-            logging.warn(f'Nieuwsverzamelen afgerond met {len(foutenGevondenList)} fouten.')
-            for fout in foutenGevondenList:
+        if len(fouten_gevonden) != 0:
+            logging.warn(f'Nieuwsverzamelen afgerond met {len(fouten_gevonden)} fouten.')
+            for fout in fouten_gevonden:
                 logging.warning('Fout: ' + fout)
 
-schedule.every(WAIT_FOR_MINUTES).minutes.do(nieuwsVanBronnenHalen)
+schedule.every(WAIT_FOR_MINUTES).minutes.do(nieuws_van_bronnen_halen)
 
 if __name__ == "__main__":
     while True:
